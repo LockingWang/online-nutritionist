@@ -67,7 +67,7 @@ model Goal {
   targetDate   DateTime? @map("target_date") @db.Date // 目標達成日期
 
   // 身體組成目標（可選）
-  targetBodyFat      Decimal? @map("target_body_fat") @db.Decimal(5, 2) // 目標體脂率 (%)
+  targetFatRate      Decimal? @map("target_fat_rate") @db.Decimal(5, 2) // 目標體脂率 (%)
   targetFatWeight    Decimal? @map("target_fat_weight") @db.Decimal(5, 2) // 目標脂肪重 (kg)
   targetMuscleRate   Decimal? @map("target_muscle_rate") @db.Decimal(5, 2) // 目標肌肉率 (%)
   targetMuscleWeight Decimal? @map("target_muscle_weight") @db.Decimal(5, 2) // 目標肌肉重 (kg)
