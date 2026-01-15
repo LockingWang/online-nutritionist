@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { errorResponse } from '../utils/response';
+import { env } from '../config/env';
 
 /**
  * 擴展 Request 介面，加入 user 屬性
@@ -33,12 +34,8 @@ export const authMiddleware = (
 
     const token = authHeader.substring(7); // 移除 'Bearer ' 前綴
 
-    if (!process.env.JWT_SECRET) {
-      throw new Error('JWT_SECRET 未設定');
-    }
-
     // 驗證 Token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET) as {
+    const decoded = jwt.verify(token, env.JWT_SECRET) as {
       userId: string;
     };
 

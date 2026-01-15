@@ -3,6 +3,7 @@ import cors from 'cors';
 import { connectDatabase } from './config/database';
 import { errorHandler } from './middleware/errorHandler';
 import { env } from './config/env';
+import authRoutes from './routes/authRoutes';
 // 注意：dotenv.config() 已在 env.ts 中執行
 
 // 驗證環境變數（在載入後立即驗證）
@@ -27,8 +28,7 @@ app.get('/health', (req, res) => {
 });
 
 // API 路由
-// TODO: 之後會在這裡加入路由
-// app.use('/api/auth', authRoutes);
+app.use('/api/auth', authRoutes);
 // app.use('/api/users', userRoutes);
 // app.use('/api/food-logs', foodLogRoutes);
 // app.use('/api/nutrition', nutritionRoutes);
