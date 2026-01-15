@@ -1,9 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
@@ -11,4 +8,252 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// 1. 使用者表
+// ============================================
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  name         String?
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  // 關聯
+  bodyCompositions      BodyComposition[]
+  goals                 Goal[]
+  nutritionRequirements NutritionRequirement[]
+  foods                 Food[]
+  foodLogs              FoodLog[]
+  aiChatSessions        AiChatSession[]
+  aiAnalyses            AiAnalysis[]
+
+  @@map("users")
+}
+
+// ============================================
+// 2. 身體組成表
+// ============================================
+model BodyComposition {
+  id            String   @id @default(uuid())
+  userId        String   @map("user_id")
+  height        Decimal  @db.Decimal(5, 2) // 身高 (cm)
+  weight        Decimal  @db.Decimal(5, 2) // 體重 (kg)
+  age           Int
+  gender        String // 'male' | 'female'
+  activityLevel String   @map("activity_level") // 'sedentary' | 'light' | 'moderate' | 'active' | 'veryActive'
+  bodyFat       Decimal? @map("body_fat") @db.Decimal(5, 2) // 體脂率 (%)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  // 關聯
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("body_compositions")
+}
+
+// ============================================
+// 3. 目標設定表
+// ============================================
+model Goal {
+  id           String    @id @default(uuid())
+  userId       String    @map("user_id")
+  goalType     String    @map("goal_type") // 'lose' | 'gain' | 'maintain'
+  targetWeight Decimal?  @map("target_weight") @db.Decimal(5, 2) // 目標體重 (kg)
+  targetDate   DateTime? @map("target_date") @db.Date // 目標達成日期
+
+  // 身體組成目標（可選）
+  targetBodyFat      Decimal? @map("target_body_fat") @db.Decimal(5, 2) // 目標體脂率 (%)
+  targetFatWeight    Decimal? @map("target_fat_weight") @db.Decimal(5, 2) // 目標脂肪重 (kg)
+  targetMuscleRate   Decimal? @map("target_muscle_rate") @db.Decimal(5, 2) // 目標肌肉率 (%)
+  targetMuscleWeight Decimal? @map("target_muscle_weight") @db.Decimal(5, 2) // 目標肌肉重 (kg)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // 關聯
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("goals")
+}
+
+// ============================================
+// 4. 營養需求表
+// ============================================
+model NutritionRequirement {
+  id            String   @id @default(uuid())
+  userId        String   @map("user_id")
+  dailyCalories Decimal  @map("daily_calories") @db.Decimal(8, 2)
+  protein       Decimal  @db.Decimal(8, 2) // 蛋白質 (g)
+  carbohydrates Decimal  @db.Decimal(8, 2) // 碳水化合物 (g)
+  fat           Decimal  @db.Decimal(8, 2) // 脂肪 (g)
+  calculatedAt  DateTime @default(now()) @map("calculated_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  // 關聯
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("nutrition_requirements")
+}
+
+// ============================================
+// 5. 食物資料庫表
+// ============================================
+model Food {
+  id    String  @id @default(uuid())
+  name  String
+  brand String?
+
+  // 基準單位類型：'g' (克) 或 'ml' (毫升)
+  baseUnit String @default("g") @map("base_unit") // 'g' | 'ml'
+
+  // 每 100 基準單位的營養值（100g 或 100ml，依 baseUnit 而定）
+  caloriesPer100Base      Decimal  @map("calories_per_100_base") @db.Decimal(8, 2)
+  proteinPer100Base       Decimal  @map("protein_per_100_base") @db.Decimal(8, 2)
+  carbohydratesPer100Base Decimal  @map("carbohydrates_per_100_base") @db.Decimal(8, 2)
+  fatPer100Base           Decimal  @map("fat_per_100_base") @db.Decimal(8, 2)
+  fiber                   Decimal? @db.Decimal(8, 2) // 纖維 (g)
+  sugar                   Decimal? @db.Decimal(8, 2) // 糖 (g)
+
+  // 一份的大小（可選，如果支援「一份」單位）
+  // 如果設定，表示一份等於多少基準單位（克或毫升）
+  servingSize Decimal? @map("serving_size") @db.Decimal(8, 2) // 一份 = 多少基準單位
+
+  category  String? // 食物分類
+  isCustom  Boolean  @default(false) @map("is_custom") // 是否為使用者自訂
+  createdBy String?  @map("created_by") // 建立者（自訂食物）
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // 關聯
+  creator   User?      @relation(fields: [createdBy], references: [id], onDelete: SetNull)
+  foodLogs  FoodLog[]
+  mealFoods MealFood[]
+
+  @@map("foods")
+}
+
+// ============================================
+// 6. 飲食記錄表
+// ============================================
+model FoodLog {
+  id       String   @id @default(uuid())
+  userId   String   @map("user_id")
+  foodId   String?  @map("food_id") // 可選：如果有，關聯到 Food 表
+  foodName String?  @map("food_name") // 可選：當沒有 foodId 時使用（快速記錄）
+  date     DateTime @db.Date // 記錄日期
+  mealType String   @map("meal_type") // 'breakfast' | 'lunch' | 'dinner' | 'snack'
+  quantity Decimal  @db.Decimal(8, 2) // 份量數值
+  unit     String   @default("g") // 單位：'g' (克) | 'ml' (毫升) | 'serving' (一份)
+
+  // 實際記錄的營養值（必填）
+  // 無論是從 Food 計算還是使用者自訂，最終都儲存在這裡
+  calories      Decimal @db.Decimal(8, 2)
+  protein       Decimal @db.Decimal(8, 2)
+  carbohydrates Decimal @db.Decimal(8, 2)
+  fat           Decimal @db.Decimal(8, 2)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // 關聯
+  user User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  food Food? @relation(fields: [foodId], references: [id], onDelete: SetNull)
+
+  // 索引優化
+  @@index([userId, date], name: "idx_food_logs_user_date")
+  @@index([date], name: "idx_food_logs_date")
+  @@map("food_logs")
+}
+
+// ============================================
+// 7. 餐點資料庫表
+// ============================================
+model Meal {
+  id            String   @id @default(uuid())
+  name          String
+  description   String?  @db.Text
+  mealType      String   @map("meal_type") // 'breakfast' | 'lunch' | 'dinner' | 'snack'
+  calories      Decimal  @db.Decimal(8, 2)
+  protein       Decimal  @db.Decimal(8, 2)
+  carbohydrates Decimal  @db.Decimal(8, 2)
+  fat           Decimal  @db.Decimal(8, 2)
+  imageUrl      String?  @map("image_url")
+  category      String? // 餐點分類（低卡、高蛋白等）
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  // 關聯
+  mealFoods MealFood[]
+
+  @@map("meals")
+}
+
+// ============================================
+// 8. 餐點食物關聯表
+// ============================================
+model MealFood {
+  id        String   @id @default(uuid())
+  mealId    String   @map("meal_id")
+  foodId    String   @map("food_id")
+  quantity  Decimal  @db.Decimal(8, 2) // 該食物在餐點中的份量數值
+  unit      String   @default("g") // 單位：'g' (克) | 'ml' (毫升) | 'serving' (一份)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // 關聯
+  meal Meal @relation(fields: [mealId], references: [id], onDelete: Cascade)
+  food Food @relation(fields: [foodId], references: [id], onDelete: Cascade)
+
+  @@map("meal_foods")
+}
+
+// ============================================
+// 9. AI 聊天會話表
+// ============================================
+model AiChatSession {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // 關聯
+  user     User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages AiChatMessage[]
+
+  @@map("ai_chat_sessions")
+}
+
+// ============================================
+// 10. AI 聊天訊息表
+// ============================================
+model AiChatMessage {
+  id        String   @id @default(uuid())
+  sessionId String   @map("session_id")
+  role      String // 'user' | 'assistant' | 'system'
+  content   String   @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // 關聯
+  session AiChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@map("ai_chat_messages")
+}
+
+// ============================================
+// 11. AI 分析記錄表
+// ============================================
+model AiAnalysis {
+  id           String   @id @default(uuid())
+  userId       String   @map("user_id")
+  date         DateTime @db.Date
+  analysisType String   @map("analysis_type") // 'nutrition_status' | 'meal_recommendation'
+  inputData    Json?    @map("input_data")
+  aiResponse   Json?    @map("ai_response")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  // 關聯
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("ai_analyses")
 }
