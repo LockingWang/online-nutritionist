@@ -8,7 +8,8 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  // URL 已移至 prisma.config.ts（用於 migrate）
+  url      = env("DATABASE_URL")
+  // 注意：prisma.config.ts 用於 migrate 時的額外設定
   // Runtime 使用 adapter（在 database.ts 中設定）
 }
 

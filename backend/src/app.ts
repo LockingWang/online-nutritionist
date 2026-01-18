@@ -1,10 +1,13 @@
 import express from 'express';
 import cors from 'cors';
+import swaggerUi from 'swagger-ui-express';
 import { connectDatabase } from './config/database';
 import { errorHandler } from './middleware/errorHandler';
 import { env } from './config/env';
+import { swaggerSpec } from './config/swagger';
 import authRoutes from './routes/authRoutes';
 import userRoutes from './routes/userRoutes';
+import foodRoutes from './routes/foodRoutes';
 // 注意：dotenv.config() 已在 env.ts 中執行
 
 // 驗證環境變數（在載入後立即驗證）
@@ -28,9 +31,16 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', message: 'Server is running' });
 });
 
+// Swagger API 文檔
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+  customCss: '.swagger-ui .topbar { display: none }',
+  customSiteTitle: '營養管理系統 API 文檔',
+}));
+
 // API 路由
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/foods', foodRoutes);
 // app.use('/api/food-logs', foodLogRoutes);
 // app.use('/api/nutrition', nutritionRoutes);
 // app.use('/api/ai', aiRoutes);
