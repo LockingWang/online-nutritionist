@@ -1,18 +1,24 @@
+/**
+ * Redux Store 設定
+ */
+
 import { configureStore } from '@reduxjs/toolkit';
-// 未來會在這裡導入各個 slice
-// import authSlice from './slices/authSlice';
-// import userSlice from './slices/userSlice';
-// import nutritionSlice from './slices/nutritionSlice';
-// import foodLogSlice from './slices/foodLogSlice';
+import authReducer from './slices/authSlice';
+import userReducer from './slices/userSlice';
 
 export const store = configureStore({
   reducer: {
-    // 未來會在這裡添加各個 reducer
-    // auth: authSlice,
-    // user: userSlice,
-    // nutrition: nutritionSlice,
-    // foodLog: foodLogSlice,
+    auth: authReducer,
+    user: userReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        // 忽略某些 action 的序列化檢查（如果需要）
+        ignoredActions: [],
+      },
+    }),
+  devTools: import.meta.env.DEV, // 只在開發環境啟用 DevTools
 });
 
 export type RootState = ReturnType<typeof store.getState>;

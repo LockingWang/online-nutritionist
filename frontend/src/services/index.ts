@@ -1,7 +1,11 @@
-// API 服務導出
-export { default as api } from './api';
-// 未來會在這裡導出其他服務
-// export * from './authService';
-// export * from './nutritionService';
-// export * from './foodService';
-// export * from './mealService';
+/**
+ * 服務匯出
+ */
+
+export { api, default as apiClient } from './api';
+export { authService } from './authService';
+export { userService } from './userService';
+
+// 類型匯出
+export type { LoginCredentials, RegisterData, AuthResponse } from './authService';
+export type { Goal, UpdateGoalInput } from './userService';

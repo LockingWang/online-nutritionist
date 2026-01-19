@@ -1,10 +1,13 @@
-// 頁面元件導出
-// 未來會在這裡導出所有頁面元件
-// export { default as Home } from './Home';
-// export { default as Login } from './Login';
-// export { default as Register } from './Register';
-// export { default as Dashboard } from './Dashboard';
-// export { default as Profile } from './Profile';
-// export { default as FoodLog } from './FoodLog';
-// export { default as MealSuggestion } from './MealSuggestion';
-// export { default as Statistics } from './Statistics';
+/**
+ * 頁面匯出
+ */
+
+export { LoginPage } from './LoginPage';
+export { RegisterPage } from './RegisterPage';
+export { DashboardPage } from './DashboardPage';
+
+// 暫時的佔位頁面（後續開發）
+export { default as ProfilePage } from './PlaceholderPages';
+export { default as FoodLogPage } from './PlaceholderPages';
+export { default as MealSuggestionPage } from './PlaceholderPages';
+export { default as StatisticsPage } from './PlaceholderPages';
