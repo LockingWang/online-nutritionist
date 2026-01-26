@@ -199,10 +199,10 @@ export const getFoodLogById = async (userId: string, logId: string) => {
           name: true,
           brand: true,
           baseUnit: true,
-          caloriesPer100Base: true,
-          proteinPer100Base: true,
-          carbohydratesPer100Base: true,
-          fatPer100Base: true,
+          calories: true,
+          protein: true,
+          carbohydrates: true,
+          fat: true,
           servingSize: true,
           category: true,
         },
@@ -241,10 +241,10 @@ export const getFoodLogById = async (userId: string, logId: string) => {
     food: foodLog.food
       ? {
           ...foodLog.food,
-          caloriesPer100Base: Number(foodLog.food.caloriesPer100Base),
-          proteinPer100Base: Number(foodLog.food.proteinPer100Base),
-          carbohydratesPer100Base: Number(foodLog.food.carbohydratesPer100Base),
-          fatPer100Base: Number(foodLog.food.fatPer100Base),
+          calories: Number(foodLog.food.calories),
+          protein: Number(foodLog.food.protein),
+          carbohydrates: Number(foodLog.food.carbohydrates),
+          fat: Number(foodLog.food.fat),
           servingSize: foodLog.food.servingSize
             ? Number(foodLog.food.servingSize)
             : null,
@@ -294,10 +294,10 @@ export const createFoodLog = async (
       select: {
         name: true,
         baseUnit: true,
-        caloriesPer100Base: true,
-        proteinPer100Base: true,
-        carbohydratesPer100Base: true,
-        fatPer100Base: true,
+        calories: true,
+        protein: true,
+        carbohydrates: true,
+        fat: true,
         servingSize: true,
       },
     });
@@ -312,10 +312,10 @@ export const createFoodLog = async (
     const nutrition = calculateFoodNutrition(
       {
         baseUnit: food.baseUnit,
-        caloriesPer100Base: Number(food.caloriesPer100Base),
-        proteinPer100Base: Number(food.proteinPer100Base),
-        carbohydratesPer100Base: Number(food.carbohydratesPer100Base),
-        fatPer100Base: Number(food.fatPer100Base),
+        calories: Number(food.calories),
+        protein: Number(food.protein),
+        carbohydrates: Number(food.carbohydrates),
+        fat: Number(food.fat),
         servingSize: food.servingSize ? Number(food.servingSize) : null,
       },
       quantity,
@@ -473,10 +473,10 @@ export const updateFoodLog = async (
         select: {
           name: true,
           baseUnit: true,
-          caloriesPer100Base: true,
-          proteinPer100Base: true,
-          carbohydratesPer100Base: true,
-          fatPer100Base: true,
+          calories: true,
+          protein: true,
+          carbohydrates: true,
+          fat: true,
           servingSize: true,
         },
       });
@@ -490,10 +490,10 @@ export const updateFoodLog = async (
       const nutrition = calculateFoodNutrition(
         {
           baseUnit: food.baseUnit,
-          caloriesPer100Base: Number(food.caloriesPer100Base),
-          proteinPer100Base: Number(food.proteinPer100Base),
-          carbohydratesPer100Base: Number(food.carbohydratesPer100Base),
-          fatPer100Base: Number(food.fatPer100Base),
+          calories: Number(food.calories),
+          protein: Number(food.protein),
+          carbohydrates: Number(food.carbohydrates),
+          fat: Number(food.fat),
           servingSize: food.servingSize ? Number(food.servingSize) : null,
         },
         newQuantity,

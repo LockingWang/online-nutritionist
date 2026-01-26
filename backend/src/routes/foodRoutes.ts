@@ -32,16 +32,31 @@ const searchFoodsSchema = z.object({
 const createCustomFoodSchema = z.object({
   body: z.object({
     name: z.string().min(1, '食物名稱不能為空'),
-    brand: z.string().optional(),
-    baseUnit: z.enum(['g', 'ml'], '基準單位必須是 g 或 ml').optional(),
-    caloriesPer100Base: z.number().min(0, '熱量不能為負數'),
-    proteinPer100Base: z.number().min(0, '蛋白質不能為負數'),
-    carbohydratesPer100Base: z.number().min(0, '碳水化合物不能為負數'),
-    fatPer100Base: z.number().min(0, '脂肪不能為負數'),
-    fiber: z.number().min(0, '纖維不能為負數').optional(),
-    sugar: z.number().min(0, '糖不能為負數').optional(),
-    servingSize: z.number().positive('一份大小必須大於 0').optional(),
-    category: z.string().optional(),
+    brand: z
+      .union([z.string(), z.literal('')])
+      .optional()
+      .transform((val) => (val === '' ? undefined : val)),
+    baseUnit: z.enum(['g', 'ml', 'serving'], '基準單位必須是 g、ml 或 serving').optional(),
+    calories: z.coerce.number().min(0, '熱量不能為負數'),
+    protein: z.coerce.number().min(0, '蛋白質不能為負數'),
+    carbohydrates: z.coerce.number().min(0, '碳水化合物不能為負數'),
+    fat: z.coerce.number().min(0, '脂肪不能為負數'),
+    fiber: z
+      .union([z.coerce.number().min(0, '纖維不能為負數'), z.literal('')])
+      .optional()
+      .transform((val) => (val === '' ? undefined : val)),
+    sugar: z
+      .union([z.coerce.number().min(0, '糖不能為負數'), z.literal('')])
+      .optional()
+      .transform((val) => (val === '' ? undefined : val)),
+    servingSize: z
+      .union([z.coerce.number().positive('一份大小必須大於 0'), z.literal('')])
+      .optional()
+      .transform((val) => (val === '' ? undefined : val)),
+    category: z
+      .union([z.string(), z.literal('')])
+      .optional()
+      .transform((val) => (val === '' ? undefined : val)),
   }),
 });
 
@@ -49,16 +64,31 @@ const createCustomFoodSchema = z.object({
 const updateCustomFoodSchema = z.object({
   body: z.object({
     name: z.string().min(1, '食物名稱不能為空').optional(),
-    brand: z.string().optional(),
-    baseUnit: z.enum(['g', 'ml'], '基準單位必須是 g 或 ml').optional(),
-    caloriesPer100Base: z.number().min(0, '熱量不能為負數').optional(),
-    proteinPer100Base: z.number().min(0, '蛋白質不能為負數').optional(),
-    carbohydratesPer100Base: z.number().min(0, '碳水化合物不能為負數').optional(),
-    fatPer100Base: z.number().min(0, '脂肪不能為負數').optional(),
-    fiber: z.number().min(0, '纖維不能為負數').optional(),
-    sugar: z.number().min(0, '糖不能為負數').optional(),
-    servingSize: z.number().positive('一份大小必須大於 0').optional(),
-    category: z.string().optional(),
+    brand: z
+      .union([z.string(), z.literal('')])
+      .optional()
+      .transform((val) => (val === '' ? undefined : val)),
+    baseUnit: z.enum(['g', 'ml', 'serving'], '基準單位必須是 g、ml 或 serving').optional(),
+    calories: z.coerce.number().min(0, '熱量不能為負數').optional(),
+    protein: z.coerce.number().min(0, '蛋白質不能為負數').optional(),
+    carbohydrates: z.coerce.number().min(0, '碳水化合物不能為負數').optional(),
+    fat: z.coerce.number().min(0, '脂肪不能為負數').optional(),
+    fiber: z
+      .union([z.coerce.number().min(0, '纖維不能為負數'), z.literal('')])
+      .optional()
+      .transform((val) => (val === '' ? undefined : val)),
+    sugar: z
+      .union([z.coerce.number().min(0, '糖不能為負數'), z.literal('')])
+      .optional()
+      .transform((val) => (val === '' ? undefined : val)),
+    servingSize: z
+      .union([z.coerce.number().positive('一份大小必須大於 0'), z.literal('')])
+      .optional()
+      .transform((val) => (val === '' ? undefined : val)),
+    category: z
+      .union([z.string(), z.literal('')])
+      .optional()
+      .transform((val) => (val === '' ? undefined : val)),
   }),
 });
 

@@ -104,10 +104,10 @@ export const searchFoods = async (params: SearchFoodsParams = {}) => {
       name: true,
       brand: true,
       baseUnit: true,
-      caloriesPer100Base: true,
-      proteinPer100Base: true,
-      carbohydratesPer100Base: true,
-      fatPer100Base: true,
+      calories: true,
+      protein: true,
+      carbohydrates: true,
+      fat: true,
       fiber: true,
       sugar: true,
       servingSize: true,
@@ -120,10 +120,10 @@ export const searchFoods = async (params: SearchFoodsParams = {}) => {
   // 轉換 Decimal 為 number
   const formattedFoods = foods.map((food) => ({
     ...food,
-    caloriesPer100Base: Number(food.caloriesPer100Base),
-    proteinPer100Base: Number(food.proteinPer100Base),
-    carbohydratesPer100Base: Number(food.carbohydratesPer100Base),
-    fatPer100Base: Number(food.fatPer100Base),
+    calories: Number(food.calories),
+    protein: Number(food.protein),
+    carbohydrates: Number(food.carbohydrates),
+    fat: Number(food.fat),
     fiber: food.fiber ? Number(food.fiber) : null,
     sugar: food.sugar ? Number(food.sugar) : null,
     servingSize: food.servingSize ? Number(food.servingSize) : null,
@@ -151,10 +151,10 @@ export const getFoodById = async (foodId: string) => {
       name: true,
       brand: true,
       baseUnit: true,
-      caloriesPer100Base: true,
-      proteinPer100Base: true,
-      carbohydratesPer100Base: true,
-      fatPer100Base: true,
+      calories: true,
+      protein: true,
+      carbohydrates: true,
+      fat: true,
       fiber: true,
       sugar: true,
       servingSize: true,
@@ -181,10 +181,10 @@ export const getFoodById = async (foodId: string) => {
   // 轉換 Decimal 為 number
   return {
     ...food,
-    caloriesPer100Base: Number(food.caloriesPer100Base),
-    proteinPer100Base: Number(food.proteinPer100Base),
-    carbohydratesPer100Base: Number(food.carbohydratesPer100Base),
-    fatPer100Base: Number(food.fatPer100Base),
+    calories: Number(food.calories),
+    protein: Number(food.protein),
+    carbohydrates: Number(food.carbohydrates),
+    fat: Number(food.fat),
     fiber: food.fiber ? Number(food.fiber) : null,
     sugar: food.sugar ? Number(food.sugar) : null,
     servingSize: food.servingSize ? Number(food.servingSize) : null,
@@ -197,14 +197,14 @@ export const getFoodById = async (foodId: string) => {
 export interface CreateCustomFoodInput {
   name: string;
   brand?: string;
-  baseUnit?: 'g' | 'ml'; // 預設為 'g'
-  caloriesPer100Base: number;
-  proteinPer100Base: number;
-  carbohydratesPer100Base: number;
-  fatPer100Base: number;
+  baseUnit?: 'g' | 'ml' | 'serving'; // 預設為 'g'
+  calories: number;
+  protein: number;
+  carbohydrates: number;
+  fat: number;
   fiber?: number;
   sugar?: number;
-  servingSize?: number;
+  servingSize?: number; // 當 baseUnit 為 'g' 或 'ml' 時，表示一份等於多少基準單位
   category?: string;
 }
 
@@ -237,10 +237,10 @@ export const createCustomFood = async (
       name: input.name,
       brand: input.brand || null,
       baseUnit: input.baseUnit || 'g',
-      caloriesPer100Base: input.caloriesPer100Base,
-      proteinPer100Base: input.proteinPer100Base,
-      carbohydratesPer100Base: input.carbohydratesPer100Base,
-      fatPer100Base: input.fatPer100Base,
+      calories: input.calories,
+      protein: input.protein,
+      carbohydrates: input.carbohydrates,
+      fat: input.fat,
       fiber: input.fiber || null,
       sugar: input.sugar || null,
       servingSize: input.servingSize || null,
@@ -253,10 +253,10 @@ export const createCustomFood = async (
       name: true,
       brand: true,
       baseUnit: true,
-      caloriesPer100Base: true,
-      proteinPer100Base: true,
-      carbohydratesPer100Base: true,
-      fatPer100Base: true,
+      calories: true,
+      protein: true,
+      carbohydrates: true,
+      fat: true,
       fiber: true,
       sugar: true,
       servingSize: true,
@@ -269,10 +269,10 @@ export const createCustomFood = async (
   // 轉換 Decimal 為 number
   return {
     ...food,
-    caloriesPer100Base: Number(food.caloriesPer100Base),
-    proteinPer100Base: Number(food.proteinPer100Base),
-    carbohydratesPer100Base: Number(food.carbohydratesPer100Base),
-    fatPer100Base: Number(food.fatPer100Base),
+    calories: Number(food.calories),
+    protein: Number(food.protein),
+    carbohydrates: Number(food.carbohydrates),
+    fat: Number(food.fat),
     fiber: food.fiber ? Number(food.fiber) : null,
     sugar: food.sugar ? Number(food.sugar) : null,
     servingSize: food.servingSize ? Number(food.servingSize) : null,
@@ -285,11 +285,11 @@ export const createCustomFood = async (
 export interface UpdateCustomFoodInput {
   name?: string;
   brand?: string;
-  baseUnit?: 'g' | 'ml';
-  caloriesPer100Base?: number;
-  proteinPer100Base?: number;
-  carbohydratesPer100Base?: number;
-  fatPer100Base?: number;
+  baseUnit?: 'g' | 'ml' | 'serving';
+  calories?: number;
+  protein?: number;
+  carbohydrates?: number;
+  fat?: number;
   fiber?: number;
   sugar?: number;
   servingSize?: number;
@@ -350,17 +350,17 @@ export const updateCustomFood = async (
       ...(input.name !== undefined && { name: input.name }),
       ...(input.brand !== undefined && { brand: input.brand || null }),
       ...(input.baseUnit !== undefined && { baseUnit: input.baseUnit }),
-      ...(input.caloriesPer100Base !== undefined && {
-        caloriesPer100Base: input.caloriesPer100Base,
+      ...(input.calories !== undefined && {
+        calories: input.calories,
       }),
-      ...(input.proteinPer100Base !== undefined && {
-        proteinPer100Base: input.proteinPer100Base,
+      ...(input.protein !== undefined && {
+        protein: input.protein,
       }),
-      ...(input.carbohydratesPer100Base !== undefined && {
-        carbohydratesPer100Base: input.carbohydratesPer100Base,
+      ...(input.carbohydrates !== undefined && {
+        carbohydrates: input.carbohydrates,
       }),
-      ...(input.fatPer100Base !== undefined && {
-        fatPer100Base: input.fatPer100Base,
+      ...(input.fat !== undefined && {
+        fat: input.fat,
       }),
       ...(input.fiber !== undefined && { fiber: input.fiber || null }),
       ...(input.sugar !== undefined && { sugar: input.sugar || null }),
@@ -374,10 +374,10 @@ export const updateCustomFood = async (
       name: true,
       brand: true,
       baseUnit: true,
-      caloriesPer100Base: true,
-      proteinPer100Base: true,
-      carbohydratesPer100Base: true,
-      fatPer100Base: true,
+      calories: true,
+      protein: true,
+      carbohydrates: true,
+      fat: true,
       fiber: true,
       sugar: true,
       servingSize: true,
@@ -390,10 +390,10 @@ export const updateCustomFood = async (
   // 轉換 Decimal 為 number
   return {
     ...food,
-    caloriesPer100Base: Number(food.caloriesPer100Base),
-    proteinPer100Base: Number(food.proteinPer100Base),
-    carbohydratesPer100Base: Number(food.carbohydratesPer100Base),
-    fatPer100Base: Number(food.fatPer100Base),
+    calories: Number(food.calories),
+    protein: Number(food.protein),
+    carbohydrates: Number(food.carbohydrates),
+    fat: Number(food.fat),
     fiber: food.fiber ? Number(food.fiber) : null,
     sugar: food.sugar ? Number(food.sugar) : null,
     servingSize: food.servingSize ? Number(food.servingSize) : null,

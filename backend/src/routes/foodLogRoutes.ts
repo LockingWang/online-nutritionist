@@ -66,16 +66,20 @@ const createFoodLogSchema = z.object({
       foodName: z.string().min(1, '食物名稱不能為空').max(100).optional(),
       date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, '日期格式必須為 YYYY-MM-DD'),
       mealType: mealTypeSchema,
-      quantity: z.number().positive('份量必須大於 0'),
+      quantity: z.coerce.number().positive('份量必須大於 0'),
       unit: unitTypeSchema.optional().default('g'),
       // 快速記錄時需要提供的營養值
-      calories: z.number().min(0).optional(),
-      protein: z.number().min(0).optional(),
-      carbohydrates: z.number().min(0).optional(),
-      fat: z.number().min(0).optional(),
+      calories: z.coerce.number().min(0).optional(),
+      protein: z.coerce.number().min(0).optional(),
+      carbohydrates: z.coerce.number().min(0).optional(),
+      fat: z.coerce.number().min(0).optional(),
     })
     .refine(
       (data) => {
+        // 必須提供 foodId 或 foodName
+        if (!data.foodId && !data.foodName) {
+          return false;
+        }
         // 如果沒有 foodId，必須提供完整的營養資訊和食物名稱
         if (!data.foodId) {
           return (
@@ -86,11 +90,12 @@ const createFoodLogSchema = z.object({
             data.fat !== undefined
           );
         }
+        // 如果有 foodId，foodName 是可選的（會從資料庫取得）
         return true;
       },
       {
         message:
-          '快速記錄模式需要提供食物名稱和完整的營養資訊（calories, protein, carbohydrates, fat）',
+          '請提供 foodId 或 foodName。如果使用 foodName（快速記錄模式），必須同時提供完整的營養資訊（calories, protein, carbohydrates, fat）',
       }
     ),
 });
@@ -107,12 +112,12 @@ const updateFoodLogSchema = z.object({
       .regex(/^\d{4}-\d{2}-\d{2}$/, '日期格式必須為 YYYY-MM-DD')
       .optional(),
     mealType: mealTypeSchema.optional(),
-    quantity: z.number().positive('份量必須大於 0').optional(),
+    quantity: z.coerce.number().positive('份量必須大於 0').optional(),
     unit: unitTypeSchema.optional(),
-    calories: z.number().min(0).optional(),
-    protein: z.number().min(0).optional(),
-    carbohydrates: z.number().min(0).optional(),
-    fat: z.number().min(0).optional(),
+    calories: z.coerce.number().min(0).optional(),
+    protein: z.coerce.number().min(0).optional(),
+    carbohydrates: z.coerce.number().min(0).optional(),
+    fat: z.coerce.number().min(0).optional(),
   }),
 });
 

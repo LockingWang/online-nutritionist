@@ -103,6 +103,34 @@ export const updateUser = async (userId: string, input: UpdateUserInput) => {
 };
 
 /**
+ * 取得身體組成資料
+ */
+export const getBodyComposition = async (userId: string) => {
+  const bodyComposition = await prisma.bodyComposition.findFirst({
+    where: { userId },
+    orderBy: { createdAt: 'desc' },
+  });
+
+  if (!bodyComposition) {
+    const error: any = new Error('尚未設定身體組成資料');
+    error.code = 'BODY_COMPOSITION_NOT_FOUND';
+    throw error;
+  }
+
+  return {
+    id: bodyComposition.id,
+    height: Number(bodyComposition.height),
+    weight: Number(bodyComposition.weight),
+    age: bodyComposition.age,
+    gender: bodyComposition.gender as 'male' | 'female',
+    activityLevel: bodyComposition.activityLevel as ActivityLevel,
+    bodyFat: bodyComposition.bodyFat ? Number(bodyComposition.bodyFat) : undefined,
+    createdAt: bodyComposition.createdAt,
+    updatedAt: bodyComposition.updatedAt,
+  };
+};
+
+/**
  * 更新身體組成資料
  */
 export interface UpdateBodyCompositionInput {
@@ -144,6 +172,35 @@ export const updateBodyComposition = async (
   }
 
   return bodyComposition;
+};
+
+/**
+ * 取得目標設定
+ */
+export const getGoal = async (userId: string) => {
+  const goal = await prisma.goal.findFirst({
+    where: { userId },
+    orderBy: { createdAt: 'desc' },
+  });
+
+  if (!goal) {
+    const error: any = new Error('尚未設定目標');
+    error.code = 'GOAL_NOT_FOUND';
+    throw error;
+  }
+
+  return {
+    id: goal.id,
+    goalType: goal.goalType as 'lose' | 'gain' | 'maintain',
+    targetWeight: goal.targetWeight ? Number(goal.targetWeight) : undefined,
+    targetDate: goal.targetDate ? goal.targetDate.toISOString() : undefined,
+    targetFatRate: goal.targetFatRate ? Number(goal.targetFatRate) : undefined,
+    targetFatWeight: goal.targetFatWeight ? Number(goal.targetFatWeight) : undefined,
+    targetMuscleRate: goal.targetMuscleRate ? Number(goal.targetMuscleRate) : undefined,
+    targetMuscleWeight: goal.targetMuscleWeight ? Number(goal.targetMuscleWeight) : undefined,
+    createdAt: goal.createdAt,
+    updatedAt: goal.updatedAt,
+  };
 };
 
 /**

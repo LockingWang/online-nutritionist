@@ -41,7 +41,7 @@ export const userService = {
    */
   async getBodyComposition(): Promise<BodyComposition> {
     const response = await api.get('/users/me/body-composition');
-    return response.data.data;
+    return response.data.data.bodyComposition;
   },
 
   /**
@@ -49,7 +49,7 @@ export const userService = {
    */
   async updateBodyComposition(data: Partial<BodyComposition>): Promise<BodyComposition> {
     const response = await api.put('/users/me/body-composition', data);
-    return response.data.data;
+    return response.data.data.bodyComposition;
   },
 
   /**
@@ -57,7 +57,7 @@ export const userService = {
    */
   async getGoal(): Promise<Goal> {
     const response = await api.get('/users/me/goals');
-    return response.data.data;
+    return response.data.data.goal;
   },
 
   /**
@@ -65,7 +65,7 @@ export const userService = {
    */
   async updateGoal(data: UpdateGoalInput): Promise<Goal> {
     const response = await api.put('/users/me/goals', data);
-    return response.data.data;
+    return response.data.data.goal;
   },
 
   /**
@@ -73,7 +73,17 @@ export const userService = {
    */
   async getNutritionRequirements(): Promise<NutritionRequirements> {
     const response = await api.get('/users/me/nutrition-requirements');
-    return response.data.data;
+    const data = response.data.data.nutritionRequirements || response.data.data;
+    // 轉換欄位名稱以匹配前端類型定義
+    return {
+      calories: data.dailyCalories || data.calories,
+      protein: data.protein,
+      carbs: data.carbohydrates || data.carbs,
+      fat: data.fat,
+      // BMR 和 TDEE 需要從身體組成資料計算，這裡先設為可選
+      bmr: data.bmr,
+      tdee: data.tdee,
+    };
   },
 
   /**

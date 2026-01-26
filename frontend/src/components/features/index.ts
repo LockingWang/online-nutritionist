@@ -1,2 +1,4 @@
 // 功能特定元件導出
-// 未來會在這裡導出所有功能特定元件
+
+export * from './food';
+export * from './nutrition';

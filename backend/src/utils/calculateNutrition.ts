@@ -45,40 +45,44 @@ export interface DailyNutritionSummary {
 export const calculateFoodNutrition = (
   food: {
     baseUnit: string;
-    caloriesPer100Base: number;
-    proteinPer100Base: number;
-    carbohydratesPer100Base: number;
-    fatPer100Base: number;
+    calories: number;
+    protein: number;
+    carbohydrates: number;
+    fat: number;
     servingSize?: number | null;
   },
   quantity: number,
   unit: string
 ): FoodNutrition => {
-  let baseQuantity: number;
+  let ratio: number;
 
-  if (unit === 'serving') {
+  if (food.baseUnit === 'serving') {
+    // 如果食物的基準單位是「份」，營養值就是每份的值
+    // 直接使用 quantity 作為份數
+    ratio = quantity;
+  } else if (unit === 'serving') {
     // 如果使用「一份」作為單位，需要轉換為基準單位
     if (!food.servingSize) {
       throw new Error('此食物未設定每份大小，無法使用「一份」作為單位');
     }
-    // 一份 = servingSize 基準單位，所以 quantity 份 = quantity * servingSize 基準單位
-    baseQuantity = quantity * food.servingSize;
+    // 一份 = servingSize 基準單位
+    // 營養值基於每 100 基準單位，所以需要計算比例
+    const baseQuantity = quantity * food.servingSize;
+    ratio = baseQuantity / 100;
   } else if (unit === food.baseUnit || unit === 'g' || unit === 'ml') {
     // 直接使用克或毫升
-    baseQuantity = quantity;
+    // 營養值基於每 100 基準單位
+    ratio = quantity / 100;
   } else {
     // 不支援的單位
     throw new Error(`不支援的單位: ${unit}`);
   }
 
-  // 計算營養值（基於每 100 基準單位）
-  const ratio = baseQuantity / 100;
-
   return {
-    calories: Math.round(food.caloriesPer100Base * ratio * 100) / 100,
-    protein: Math.round(food.proteinPer100Base * ratio * 100) / 100,
-    carbohydrates: Math.round(food.carbohydratesPer100Base * ratio * 100) / 100,
-    fat: Math.round(food.fatPer100Base * ratio * 100) / 100,
+    calories: Math.round(food.calories * ratio * 100) / 100,
+    protein: Math.round(food.protein * ratio * 100) / 100,
+    carbohydrates: Math.round(food.carbohydrates * ratio * 100) / 100,
+    fat: Math.round(food.fat * ratio * 100) / 100,
   };
 };
 

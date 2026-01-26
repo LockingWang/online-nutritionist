@@ -109,20 +109,23 @@ model Food {
   name  String
   brand String?
 
-  // 基準單位類型：'g' (克) 或 'ml' (毫升)
-  baseUnit String @default("g") @map("base_unit") // 'g' | 'ml'
+  // 基準單位類型：'g' (克)、'ml' (毫升) 或 'serving' (份)
+  baseUnit String @default("g") @map("base_unit") // 'g' | 'ml' | 'serving'
 
-  // 每 100 基準單位的營養值（100g 或 100ml，依 baseUnit 而定）
-  caloriesPer100Base      Decimal  @map("calories_per_100_base") @db.Decimal(8, 2)
-  proteinPer100Base       Decimal  @map("protein_per_100_base") @db.Decimal(8, 2)
-  carbohydratesPer100Base Decimal  @map("carbohydrates_per_100_base") @db.Decimal(8, 2)
-  fatPer100Base           Decimal  @map("fat_per_100_base") @db.Decimal(8, 2)
+  // 營養值（依 baseUnit 而定）：
+  // - 如果 baseUnit 是 'g' 或 'ml'：表示每 100 基準單位的營養值（100g 或 100ml）
+  // - 如果 baseUnit 是 'serving'：表示每份的營養值
+  calories      Decimal  @map("calories") @db.Decimal(8, 2)
+  protein       Decimal  @map("protein") @db.Decimal(8, 2)
+  carbohydrates Decimal  @map("carbohydrates") @db.Decimal(8, 2)
+  fat           Decimal  @map("fat") @db.Decimal(8, 2)
   fiber                   Decimal? @db.Decimal(8, 2) // 纖維 (g)
   sugar                   Decimal? @db.Decimal(8, 2) // 糖 (g)
 
-  // 一份的大小（可選，如果支援「一份」單位）
-  // 如果設定，表示一份等於多少基準單位（克或毫升）
-  servingSize Decimal? @map("serving_size") @db.Decimal(8, 2) // 一份 = 多少基準單位
+  // 一份的大小（當 baseUnit 為 'g' 或 'ml' 時使用）
+  // 如果 baseUnit 是 'serving'，此欄位無意義
+  // 如果 baseUnit 是 'g' 或 'ml'，表示一份等於多少基準單位（克或毫升）
+  servingSize Decimal? @map("serving_size") @db.Decimal(8, 2)
 
   category  String? // 食物分類
   isCustom  Boolean  @default(false) @map("is_custom") // 是否為使用者自訂

@@ -7,7 +7,9 @@ import { Request, Response } from 'express';
 import {
   getUserById,
   updateUser,
+  getBodyComposition,
   updateBodyComposition,
+  getGoal,
   updateGoal,
   getNutritionRequirements,
   UpdateUserInput,
@@ -83,6 +85,37 @@ export const updateUserController = async (req: Request, res: Response) => {
 };
 
 /**
+ * 取得身體組成資料
+ */
+export const getBodyCompositionController = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const userId = req.userId;
+
+    if (!userId) {
+      return res.status(401).json(
+        errorResponse('UNAUTHORIZED', '未提供認證資訊')
+      );
+    }
+
+    const bodyComposition = await getBodyComposition(userId);
+
+    res.status(200).json(
+      successResponse({ bodyComposition })
+    );
+  } catch (error: any) {
+    if (error.code === 'BODY_COMPOSITION_NOT_FOUND') {
+      return res.status(404).json(
+        errorResponse('NOT_FOUND', error.message)
+      );
+    }
+    throw error;
+  }
+};
+
+/**
  * 更新身體組成資料
  */
 export const updateBodyCompositionController = async (
@@ -108,6 +141,34 @@ export const updateBodyCompositionController = async (
       )
     );
   } catch (error) {
+    throw error;
+  }
+};
+
+/**
+ * 取得目標設定
+ */
+export const getGoalController = async (req: Request, res: Response) => {
+  try {
+    const userId = req.userId;
+
+    if (!userId) {
+      return res.status(401).json(
+        errorResponse('UNAUTHORIZED', '未提供認證資訊')
+      );
+    }
+
+    const goal = await getGoal(userId);
+
+    res.status(200).json(
+      successResponse({ goal })
+    );
+  } catch (error: any) {
+    if (error.code === 'GOAL_NOT_FOUND') {
+      return res.status(404).json(
+        errorResponse('NOT_FOUND', error.message)
+      );
+    }
     throw error;
   }
 };

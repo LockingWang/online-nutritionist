@@ -16,6 +16,8 @@ import {
   LoginPage,
   RegisterPage,
   DashboardPage,
+  ProfilePage,
+  FoodLogPage,
 } from './pages';
 import PlaceholderPage from './pages/PlaceholderPages';
 
@@ -80,7 +82,7 @@ const App: React.FC = () => {
           path={ROUTES.PROFILE}
           element={
             <ProtectedRoute>
-              <PlaceholderPage />
+              <ProfilePage />
             </ProtectedRoute>
           }
         />
@@ -88,7 +90,7 @@ const App: React.FC = () => {
           path={ROUTES.FOOD_LOG}
           element={
             <ProtectedRoute>
-              <PlaceholderPage />
+              <FoodLogPage />
             </ProtectedRoute>
           }
         />

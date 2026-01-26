@@ -5,11 +5,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from './slices/authSlice';
 import userReducer from './slices/userSlice';
+import foodLogReducer from './slices/foodLogSlice';
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     user: userReducer,
+    foodLog: foodLogReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

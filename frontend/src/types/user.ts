@@ -72,8 +72,8 @@ export const GOAL_TYPE_LABELS: Record<GoalType, string> = {
 
 export interface NutritionRequirements {
   id?: string;
-  bmr: number; // 基礎代謝率
-  tdee: number; // 總每日能量消耗
+  bmr?: number; // 基礎代謝率（可選，後端可能不提供）
+  tdee?: number; // 總每日能量消耗（可選，後端可能不提供）
   calories: number; // 建議卡路里
   protein: number; // 建議蛋白質 (g)
   carbs: number; // 建議碳水化合物 (g)
