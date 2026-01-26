@@ -29,6 +29,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: #f9fafb;
   color: #111827;
+  overflow-x: hidden; /* 防止水平滾動 */
 }
 
 #root {
@@ -155,6 +156,26 @@ select {
     transform: translateY(0);
     opacity: 1;
   }
+}
+
+/* ============================================
+ * 日期選擇器清除按鈕隱藏
+ * ============================================ */
+
+/* 隱藏 WebKit (Chrome, Safari, Edge) 的清除按鈕 */
+input[type="date"]::-webkit-clear-button {
+  display: none;
+  -webkit-appearance: none;
+}
+
+/* 隱藏 IE/Edge 的清除按鈕 */
+input[type="date"]::-ms-clear {
+  display: none;
+}
+
+/* 隱藏 Firefox 的清除按鈕 */
+input[type="date"]::-moz-clear {
+  display: none;
 }
 
 /* ============================================

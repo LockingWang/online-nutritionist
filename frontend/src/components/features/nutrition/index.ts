@@ -3,3 +3,5 @@
  */
 
 export { NutritionDisplay } from './NutritionDisplay';
+export { NutritionSummary } from './NutritionSummary';
+export { NutritionChart } from './NutritionChart';

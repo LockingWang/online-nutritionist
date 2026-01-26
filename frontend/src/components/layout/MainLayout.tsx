@@ -171,8 +171,8 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       </aside>
 
       {/* Main Content */}
-      <main className="lg:ml-64 pt-16 lg:pt-0 min-h-screen">
-        <div className="p-4 lg:p-6">
+      <main className="lg:ml-64 pt-16 lg:pt-0 min-h-screen overflow-x-hidden">
+        <div className="p-4 lg:p-6 max-w-full">
           {children}
         </div>
       </main>

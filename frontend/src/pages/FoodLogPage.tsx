@@ -32,7 +32,7 @@ import { FoodDetailEdit } from '../components/features/food/FoodDetailEdit';
 import { CreateFoodForm } from '../components/features/food/CreateFoodForm';
 import { NutritionDisplay } from '../components/features/nutrition/NutritionDisplay';
 import { MEAL_TYPE_LABELS, MEAL_TYPE_ICONS } from '../constants/meal';
-import { formatDate, getToday } from '../utils/formatDate';
+import { formatDate } from '../utils/formatDate';
 import type { MealType, FoodLog, CreateFoodLogInput, UpdateFoodLogInput } from '../services/foodLogService';
 import type { Food } from '../services/foodService';
 
@@ -75,6 +75,12 @@ export const FoodLogPage: React.FC = () => {
 
   // 處理日期變更
   const handleDateChange = (date: string) => {
+    // 如果日期被清除（空值），恢復為當前日期
+    if (!date) {
+      const today = new Date().toISOString().split('T')[0];
+      dispatch(setSelectedDate(today));
+      return;
+    }
     dispatch(setSelectedDate(date));
   };
 
@@ -90,11 +96,6 @@ export const FoodLogPage: React.FC = () => {
     const date = new Date(selectedDate);
     date.setDate(date.getDate() + 1);
     handleDateChange(formatDate(date));
-  };
-
-  // 處理今天
-  const handleToday = () => {
-    handleDateChange(getToday());
   };
 
   // 處理新增飲食記錄
@@ -254,7 +255,7 @@ export const FoodLogPage: React.FC = () => {
 
       {/* 日期選擇器 */}
       <Card>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-center">
           <div className="flex items-center gap-4">
             <button
               onClick={handlePreviousDay}
@@ -269,7 +270,8 @@ export const FoodLogPage: React.FC = () => {
                   type="date"
                   value={selectedDate}
                   onChange={(e) => handleDateChange(e.target.value)}
-                  className="text-lg font-semibold text-gray-900 border-none bg-transparent focus:outline-none focus:ring-2 focus:ring-emerald-500 rounded px-2 py-1"
+                  required
+                  className="text-lg font-semibold text-gray-900 border-none bg-transparent focus:outline-none focus:ring-2 focus:ring-emerald-500 rounded px-2 py-1 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-100 [&::-webkit-clear-button]:hidden [&::-ms-clear]:hidden"
                 />
                 <p className="text-sm text-gray-500">{formatDateDisplay(selectedDate)}</p>
               </div>
@@ -281,13 +283,6 @@ export const FoodLogPage: React.FC = () => {
               <FiChevronRight className="w-5 h-5" />
             </button>
           </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleToday}
-          >
-            今天
-          </Button>
         </div>
       </Card>
 
@@ -339,34 +334,34 @@ export const FoodLogPage: React.FC = () => {
                 {logs.map((log) => (
                   <div
                     key={log.id}
-                    className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-emerald-300 hover:bg-emerald-50 transition-all"
+                    className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 border border-gray-200 rounded-lg hover:border-emerald-300 hover:bg-emerald-50 transition-all gap-3"
                   >
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="font-medium text-gray-900">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-2 flex-wrap">
+                        <h3 className="font-medium text-gray-900 truncate">
                           {log.foodName || '未命名食物'}
                         </h3>
                         {log.food?.brand && (
-                          <span className="text-sm text-gray-500">
+                          <span className="text-sm text-gray-500 whitespace-nowrap">
                             ({log.food.brand})
                           </span>
                         )}
                       </div>
-                      <div className="flex items-center gap-4 text-sm text-gray-600">
-                        <span>
+                      <div className="flex flex-wrap items-center gap-2 text-sm text-gray-600">
+                        <span className="whitespace-nowrap">
                           {log.quantity} {log.unit}
                         </span>
-                        <span>•</span>
-                        <span>{Math.round(log.calories)} 大卡</span>
-                        <span>•</span>
-                        <span>蛋白質: {Math.round(log.protein)}g</span>
-                        <span>•</span>
-                        <span>碳水: {Math.round(log.carbohydrates)}g</span>
-                        <span>•</span>
-                        <span>脂肪: {Math.round(log.fat)}g</span>
+                        <span className="hidden sm:inline">•</span>
+                        <span className="whitespace-nowrap">{Math.round(log.calories)} 大卡</span>
+                        <span className="hidden sm:inline">•</span>
+                        <span className="whitespace-nowrap">蛋白質: {Math.round(log.protein)}g</span>
+                        <span className="hidden sm:inline">•</span>
+                        <span className="whitespace-nowrap">碳水: {Math.round(log.carbohydrates)}g</span>
+                        <span className="hidden sm:inline">•</span>
+                        <span className="whitespace-nowrap">脂肪: {Math.round(log.fat)}g</span>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2 ml-4">
+                    <div className="flex items-center gap-2 sm:ml-4 flex-shrink-0">
                       <button
                         onClick={() => handleOpenEditForm(log)}
                         className="p-2 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"

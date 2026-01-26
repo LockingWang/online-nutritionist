@@ -153,7 +153,8 @@ export const foodLogService = {
    */
   async getDailySummary(date: string): Promise<DailySummary> {
     const response = await api.get(`/food-logs/daily-summary/${date}`);
-    return response.data.data.summary;
+    // 後端直接返回 summary 資料在 data 中，不是 data.summary
+    return response.data.data;
   },
 };
 

@@ -8,9 +8,12 @@ import { Link } from 'react-router-dom';
 import { FiPlus, FiTrendingUp, FiTarget, FiActivity } from 'react-icons/fi';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { getNutritionRequirements, getGoal } from '../store/slices/userSlice';
+import { fetchDailySummary } from '../store/slices/foodLogSlice';
 import { Card, Button, Loading } from '../components/common';
 import { MainLayout } from '../components/layout';
+import { NutritionSummary } from '../components/features/nutrition';
 import { ROUTES } from '../constants/routes';
+import { getToday } from '../utils/formatDate';
 
 // ============================================
 // 元件
@@ -19,11 +22,14 @@ import { ROUTES } from '../constants/routes';
 export const DashboardPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
-  const { nutritionRequirements, goal, isLoading } = useAppSelector((state) => state.user);
+  const { nutritionRequirements, goal, isLoading: userLoading } = useAppSelector((state) => state.user);
+  const { dailySummary, isLoading: summaryLoading } = useAppSelector((state) => state.foodLog);
 
   useEffect(() => {
     dispatch(getNutritionRequirements());
     dispatch(getGoal());
+    // 載入今日營養摘要
+    dispatch(fetchDailySummary(getToday()));
   }, [dispatch]);
 
   // 取得目標類型文字
@@ -96,6 +102,13 @@ export const DashboardPage: React.FC = () => {
           </Link>
         </div>
 
+        {/* 今日營養總結 */}
+        <NutritionSummary
+          dailySummary={dailySummary}
+          target={nutritionRequirements}
+          isLoading={summaryLoading || userLoading}
+        />
+
         {/* Nutrition Requirements */}
         <Card>
           <Card.Header 
@@ -110,7 +123,7 @@ export const DashboardPage: React.FC = () => {
             }
           />
           <Card.Body>
-            {isLoading ? (
+            {userLoading ? (
               <Loading text="載入中..." />
             ) : nutritionRequirements ? (
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -167,7 +180,7 @@ export const DashboardPage: React.FC = () => {
             }
           />
           <Card.Body>
-            {isLoading ? (
+            {userLoading ? (
               <Loading text="載入中..." />
             ) : goal ? (
               <div className="flex items-center gap-4">
