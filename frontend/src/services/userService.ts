@@ -80,7 +80,6 @@ export const userService = {
       protein: data.protein,
       carbs: data.carbohydrates || data.carbs,
       fat: data.fat,
-      // BMR 和 TDEE 需要從身體組成資料計算，這裡先設為可選
       bmr: data.bmr,
       tdee: data.tdee,
     };

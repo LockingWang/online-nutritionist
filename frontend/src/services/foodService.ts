@@ -14,7 +14,7 @@ export interface Food {
   name: string;
   brand?: string | null;
   baseUnit: 'g' | 'ml' | 'serving';
-  category?: string | null;
+  category?: string[]; // 食物分類（可多選）
   calories: number;
   protein: number;
   carbohydrates: number;

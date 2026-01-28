@@ -92,7 +92,7 @@ export interface FormattedFoodLog {
     name: string;
     brand: string | null;
     baseUnit: string;
-    category: string | null;
+    category: string[]; // 食物分類（可多選）
   } | null;
 }
 

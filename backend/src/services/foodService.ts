@@ -10,7 +10,7 @@ import prisma from '../config/database';
  */
 export interface SearchFoodsParams {
   keyword?: string; // 關鍵字搜尋（名稱、品牌）
-  category?: string; // 食物分類
+  category?: string | string[]; // 食物分類（可傳入單一值或陣列，查詢包含任一分類的食物）
   isCustom?: boolean; // 是否只搜尋自訂食物
   createdBy?: string; // 建立者 ID（用於篩選自訂食物）
   page?: number; // 頁碼
@@ -42,9 +42,12 @@ export const searchFoods = async (params: SearchFoodsParams = {}) => {
     );
   }
 
-  // 分類篩選
+  // 分類篩選（支援多個分類，查詢包含任一分類的食物）
   if (category) {
-    where.category = category;
+    const categories = Array.isArray(category) ? category : [category];
+    where.category = {
+      hasSome: categories, // 使用 hasSome 查詢陣列中包含任一值的記錄
+    };
   }
 
   // 處理自訂食物和建立者篩選
@@ -205,7 +208,7 @@ export interface CreateCustomFoodInput {
   fiber?: number;
   sugar?: number;
   servingSize?: number; // 當 baseUnit 為 'g' 或 'ml' 時，表示一份等於多少基準單位
-  category?: string;
+  category?: string[]; // 食物分類（可多選）
 }
 
 /**
@@ -244,7 +247,7 @@ export const createCustomFood = async (
       fiber: input.fiber || null,
       sugar: input.sugar || null,
       servingSize: input.servingSize || null,
-      category: input.category || null,
+      category: input.category || [],
       isCustom: true,
       createdBy: userId,
     },
@@ -293,7 +296,7 @@ export interface UpdateCustomFoodInput {
   fiber?: number;
   sugar?: number;
   servingSize?: number;
-  category?: string;
+  category?: string[]; // 食物分類（可多選）
 }
 
 /**
@@ -367,7 +370,7 @@ export const updateCustomFood = async (
       ...(input.servingSize !== undefined && {
         servingSize: input.servingSize || null,
       }),
-      ...(input.category !== undefined && { category: input.category || null }),
+      ...(input.category !== undefined && { category: input.category || [] }),
     },
     select: {
       id: true,

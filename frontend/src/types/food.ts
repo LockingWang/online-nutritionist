@@ -3,7 +3,7 @@ export interface Food {
   id: string;
   name: string;
   brand?: string; // 品牌
-  category?: string; // 類別
+  category?: string[]; // 類別（可多選）
   servingSize: number; // 份量 (g)
   servingUnit: string; // 單位 (g, ml, piece, etc.)
   nutrition: {

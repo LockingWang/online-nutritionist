@@ -9,6 +9,7 @@ import authRoutes from './routes/authRoutes';
 import userRoutes from './routes/userRoutes';
 import foodRoutes from './routes/foodRoutes';
 import foodLogRoutes from './routes/foodLogRoutes';
+import mealRoutes from './routes/mealRoutes';
 // 注意：dotenv.config() 已在 env.ts 中執行
 
 // 驗證環境變數（在載入後立即驗證）
@@ -43,6 +44,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/foods', foodRoutes);
 app.use('/api/food-logs', foodLogRoutes);
+app.use('/api/meals', mealRoutes);
 // app.use('/api/nutrition', nutritionRoutes);
 // app.use('/api/ai', aiRoutes);
 

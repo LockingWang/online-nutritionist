@@ -320,11 +320,38 @@ export const getNutritionRequirements = async (userId: string) => {
     throw error;
   }
 
+  // 取得身體組成資料以計算 BMR 和 TDEE
+  const bodyComposition = await prisma.bodyComposition.findFirst({
+    where: { userId },
+    orderBy: { createdAt: 'desc' },
+  });
+
+  let bmr: number | undefined;
+  let tdee: number | undefined;
+
+  if (bodyComposition) {
+    // 計算 BMR
+    bmr = calculateBMR(
+      Number(bodyComposition.weight),
+      Number(bodyComposition.height),
+      bodyComposition.age,
+      bodyComposition.gender as Gender
+    );
+
+    // 計算 TDEE
+    tdee = calculateTDEE(
+      bmr,
+      bodyComposition.activityLevel as ActivityLevel
+    );
+  }
+
   return {
     dailyCalories: Number(nutritionRequirement.dailyCalories),
     protein: Number(nutritionRequirement.protein),
     carbohydrates: Number(nutritionRequirement.carbohydrates),
     fat: Number(nutritionRequirement.fat),
+    bmr: bmr ? Math.round(bmr) : undefined,
+    tdee: tdee ? Math.round(tdee) : undefined,
     calculatedAt: nutritionRequirement.calculatedAt,
   };
 };

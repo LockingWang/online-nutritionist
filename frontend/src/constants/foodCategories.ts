@@ -1,24 +1,21 @@
-// 食物類別常數
+// 六大類食物分類常數
 export const FOOD_CATEGORIES = {
-  GRAINS: 'grains', // 穀物
+  WHOLE_GRAINS: 'whole_grains', // 全穀雜糧
+  PROTEIN: 'protein', // 豆魚蛋肉
+  DAIRY: 'dairy', // 乳品
   VEGETABLES: 'vegetables', // 蔬菜
   FRUITS: 'fruits', // 水果
-  PROTEIN: 'protein', // 蛋白質
-  DAIRY: 'dairy', // 乳製品
-  FATS: 'fats', // 油脂
-  BEVERAGES: 'beverages', // 飲料
-  SNACKS: 'snacks', // 零食
-  OTHER: 'other', // 其他
+  NUTS_OILS: 'nuts_oils', // 堅果油脂
 } as const;
 
 export const FOOD_CATEGORY_LABELS = {
-  [FOOD_CATEGORIES.GRAINS]: '穀物',
+  [FOOD_CATEGORIES.WHOLE_GRAINS]: '全穀雜糧',
+  [FOOD_CATEGORIES.PROTEIN]: '豆魚蛋肉',
+  [FOOD_CATEGORIES.DAIRY]: '乳品',
   [FOOD_CATEGORIES.VEGETABLES]: '蔬菜',
   [FOOD_CATEGORIES.FRUITS]: '水果',
-  [FOOD_CATEGORIES.PROTEIN]: '蛋白質',
-  [FOOD_CATEGORIES.DAIRY]: '乳製品',
-  [FOOD_CATEGORIES.FATS]: '油脂',
-  [FOOD_CATEGORIES.BEVERAGES]: '飲料',
-  [FOOD_CATEGORIES.SNACKS]: '零食',
-  [FOOD_CATEGORIES.OTHER]: '其他',
+  [FOOD_CATEGORIES.NUTS_OILS]: '堅果油脂',
 } as const;
+
+// 所有分類的陣列（用於迭代）
+export const ALL_FOOD_CATEGORIES = Object.values(FOOD_CATEGORIES);

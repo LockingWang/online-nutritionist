@@ -32,7 +32,7 @@ interface CreateFoodFormData {
   name: string;
   brand?: string;
   baseUnit: 'g' | 'ml' | 'serving';
-  category?: string;
+  category?: string[]; // 食物分類（可多選）
   calories: number;
   protein: number;
   carbohydrates: number;
@@ -69,7 +69,7 @@ export const CreateFoodForm: React.FC<CreateFoodFormProps> = ({
       name: '',
       brand: '',
       baseUnit: 'g',
-      category: '',
+      category: [],
       calories: 0,
       protein: 0,
       carbohydrates: 0,
@@ -249,19 +249,38 @@ export const CreateFoodForm: React.FC<CreateFoodFormProps> = ({
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  類別
+                  類別（可多選）
                 </label>
-                <select
-                  {...register('category')}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                >
-                  <option value="">請選擇類別</option>
-                  {Object.entries(FOOD_CATEGORY_LABELS).map(([value, label]) => (
-                    <option key={value} value={value}>
-                      {label}
-                    </option>
-                  ))}
-                </select>
+                <div className="space-y-2">
+                  {Object.entries(FOOD_CATEGORY_LABELS).map(([value, label]) => {
+                    const categories = watch('category') || [];
+                    return (
+                      <label
+                        key={value}
+                        className="flex items-center space-x-2 cursor-pointer"
+                      >
+                        <input
+                          type="checkbox"
+                          value={value}
+                          checked={categories.includes(value)}
+                          onChange={(e) => {
+                            const currentCategories = categories;
+                            if (e.target.checked) {
+                              setValue('category', [...currentCategories, value]);
+                            } else {
+                              setValue(
+                                'category',
+                                currentCategories.filter((cat) => cat !== value)
+                              );
+                            }
+                          }}
+                          className="w-4 h-4 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500"
+                        />
+                        <span className="text-sm text-gray-700">{label}</span>
+                      </label>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           </div>

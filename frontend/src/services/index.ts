@@ -7,6 +7,7 @@ export { authService } from './authService';
 export { userService } from './userService';
 export { foodService } from './foodService';
 export { foodLogService } from './foodLogService';
+export { mealService } from './mealService';
 
 // 類型匯出
 export type { LoginCredentials, RegisterData, AuthResponse } from './authService';
@@ -21,3 +22,9 @@ export type {
   UpdateFoodLogInput,
   DailySummary,
 } from './foodLogService';
+export type {
+  MealSuggestion,
+  Meal,
+  GetMealsParams,
+  GetMealsResponse,
+} from './mealService';

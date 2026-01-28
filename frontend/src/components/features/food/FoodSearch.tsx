@@ -168,10 +168,17 @@ export const FoodSearch: React.FC<FoodSearchProps> = ({
                         熱量: {food.calories} 大卡
                         {food.baseUnit === 'serving' ? '/份' : `/100${food.baseUnit}`}
                       </span>
-                      {food.category && (
-                        <span className="px-2 py-0.5 bg-gray-100 rounded text-xs">
-                          {FOOD_CATEGORY_LABELS[food.category as keyof typeof FOOD_CATEGORY_LABELS] || food.category}
-                        </span>
+                      {food.category && food.category.length > 0 && (
+                        <div className="flex flex-wrap gap-1">
+                          {food.category.map((cat) => (
+                            <span
+                              key={cat}
+                              className="px-2 py-0.5 bg-gray-100 rounded text-xs"
+                            >
+                              {FOOD_CATEGORY_LABELS[cat as keyof typeof FOOD_CATEGORY_LABELS] || cat}
+                            </span>
+                          ))}
+                        </div>
                       )}
                     </div>
                     <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">

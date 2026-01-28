@@ -102,7 +102,7 @@ model NutritionRequirement {
 }
 
 // ============================================
-// 5. 食物資料庫表
+// 5. 食物資料庫表（統一用於食物和餐點）
 // ============================================
 model Food {
   id    String  @id @default(uuid())
@@ -127,15 +127,18 @@ model Food {
   // 如果 baseUnit 是 'g' 或 'ml'，表示一份等於多少基準單位（克或毫升）
   servingSize Decimal? @map("serving_size") @db.Decimal(8, 2)
 
-  category  String? // 食物分類
+  // 餐點相關欄位（可選，用於餐點建議功能）
+  description String?  @db.Text // 餐點描述
+  imageUrl    String?  @map("image_url") // 餐點圖片 URL
+
+  category  String[] @default([]) // 食物/餐點分類（六大類食物：全穀雜糧、豆魚蛋肉、乳品、蔬菜、水果、堅果油脂）
   isCustom  Boolean  @default(false) @map("is_custom") // 是否為使用者自訂
   createdBy String?  @map("created_by") // 建立者（自訂食物）
   createdAt DateTime @default(now()) @map("created_at")
 
   // 關聯
-  creator   User?      @relation(fields: [createdBy], references: [id], onDelete: SetNull)
-  foodLogs  FoodLog[]
-  mealFoods MealFood[]
+  creator  User?     @relation(fields: [createdBy], references: [id], onDelete: SetNull)
+  foodLogs FoodLog[]
 
   @@map("foods")
 }
@@ -174,47 +177,7 @@ model FoodLog {
 }
 
 // ============================================
-// 7. 餐點資料庫表
-// ============================================
-model Meal {
-  id            String   @id @default(uuid())
-  name          String
-  description   String?  @db.Text
-  mealType      String   @map("meal_type") // 'breakfast' | 'lunch' | 'dinner' | 'snack'
-  calories      Decimal  @db.Decimal(8, 2)
-  protein       Decimal  @db.Decimal(8, 2)
-  carbohydrates Decimal  @db.Decimal(8, 2)
-  fat           Decimal  @db.Decimal(8, 2)
-  imageUrl      String?  @map("image_url")
-  category      String? // 餐點分類（低卡、高蛋白等）
-  createdAt     DateTime @default(now()) @map("created_at")
-
-  // 關聯
-  mealFoods MealFood[]
-
-  @@map("meals")
-}
-
-// ============================================
-// 8. 餐點食物關聯表
-// ============================================
-model MealFood {
-  id        String   @id @default(uuid())
-  mealId    String   @map("meal_id")
-  foodId    String   @map("food_id")
-  quantity  Decimal  @db.Decimal(8, 2) // 該食物在餐點中的份量數值
-  unit      String   @default("g") // 單位：'g' (克) | 'ml' (毫升) | 'serving' (一份)
-  createdAt DateTime @default(now()) @map("created_at")
-
-  // 關聯
-  meal Meal @relation(fields: [mealId], references: [id], onDelete: Cascade)
-  food Food @relation(fields: [foodId], references: [id], onDelete: Cascade)
-
-  @@map("meal_foods")
-}
-
-// ============================================
-// 9. AI 聊天會話表
+// 7. AI 聊天會話表
 // ============================================
 model AiChatSession {
   id        String   @id @default(uuid())

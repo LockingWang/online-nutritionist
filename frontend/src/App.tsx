@@ -18,6 +18,7 @@ import {
   DashboardPage,
   ProfilePage,
   FoodLogPage,
+  MealSuggestionPage,
 } from './pages';
 import PlaceholderPage from './pages/PlaceholderPages';
 
@@ -98,7 +99,7 @@ const App: React.FC = () => {
           path={ROUTES.MEAL_SUGGESTION}
           element={
             <ProtectedRoute>
-              <PlaceholderPage />
+              <MealSuggestionPage />
             </ProtectedRoute>
           }
         />
