@@ -13,7 +13,8 @@ import {
   FiMenu, 
   FiX, 
   FiLogOut,
-  FiSun
+  FiSun,
+  FiMessageCircle
 } from 'react-icons/fi';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { logout } from '../../store/slices/authSlice';
@@ -41,6 +42,7 @@ interface NavItem {
 const navItems: NavItem[] = [
   { path: ROUTES.DASHBOARD, label: '首頁', icon: <FiHome className="w-5 h-5" /> },
   { path: ROUTES.FOOD_LOG, label: '飲食記錄', icon: <FiBook className="w-5 h-5" /> },
+  { path: ROUTES.AI_CHAT, label: 'AI 營養師', icon: <FiMessageCircle className="w-5 h-5" /> },
   { path: ROUTES.MEAL_SUGGESTION, label: '餐點建議', icon: <FiSun className="w-5 h-5" /> },
   { path: ROUTES.STATISTICS, label: '統計分析', icon: <FiPieChart className="w-5 h-5" /> },
   { path: ROUTES.PROFILE, label: '個人資料', icon: <FiUser className="w-5 h-5" /> },

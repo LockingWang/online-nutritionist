@@ -19,6 +19,7 @@ import {
   ProfilePage,
   FoodLogPage,
   MealSuggestionPage,
+  AIChatPage,
 } from './pages';
 import PlaceholderPage from './pages/PlaceholderPages';
 
@@ -100,6 +101,14 @@ const App: React.FC = () => {
           element={
             <ProtectedRoute>
               <MealSuggestionPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={ROUTES.AI_CHAT}
+          element={
+            <ProtectedRoute>
+              <AIChatPage />
             </ProtectedRoute>
           }
         />

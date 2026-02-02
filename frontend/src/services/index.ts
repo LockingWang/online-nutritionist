@@ -8,6 +8,7 @@ export { userService } from './userService';
 export { foodService } from './foodService';
 export { foodLogService } from './foodLogService';
 export { mealService } from './mealService';
+export { aiService } from './aiService';
 
 // 類型匯出
 export type { LoginCredentials, RegisterData, AuthResponse } from './authService';

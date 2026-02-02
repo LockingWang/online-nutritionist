@@ -2,3 +2,4 @@
 
 export * from './food';
 export * from './nutrition';
+export * from './ai';

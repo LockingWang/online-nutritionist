@@ -10,6 +10,7 @@ export const ROUTES = {
   PROFILE: '/profile',
   FOOD_LOG: '/food-log',
   MEAL_SUGGESTION: '/meal-suggestion',
+  AI_CHAT: '/ai-chat',
   STATISTICS: '/statistics',
 } as const;
 

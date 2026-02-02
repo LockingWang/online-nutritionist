@@ -12,6 +12,7 @@ import {
   FiChevronLeft,
   FiChevronRight,
   FiArrowLeft,
+  FiBarChart2,
 } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 import { useAppDispatch, useAppSelector } from '../hooks';
@@ -31,6 +32,7 @@ import { FoodSearch } from '../components/features/food/FoodSearch';
 import { FoodDetailEdit } from '../components/features/food/FoodDetailEdit';
 import { CreateFoodForm } from '../components/features/food/CreateFoodForm';
 import { NutritionDisplay } from '../components/features/nutrition/NutritionDisplay';
+import { AINutritionAnalysis } from '../components/features/ai';
 import { MEAL_TYPE_LABELS, MEAL_TYPE_ICONS } from '../constants/meal';
 import { formatDate } from '../utils/formatDate';
 import type { MealType, FoodLog, CreateFoodLogInput, UpdateFoodLogInput } from '../services/foodLogService';
@@ -58,6 +60,7 @@ export const FoodLogPage: React.FC = () => {
   const [selectedFood, setSelectedFood] = useState<Food | null>(null);
   const [selectedMealType, setSelectedMealType] = useState<MealType | null>(null);
   const [editingLog, setEditingLog] = useState<FoodLog | null>(null);
+  const [isAnalysisModalOpen, setIsAnalysisModalOpen] = useState(false);
 
   // 載入資料
   useEffect(() => {
@@ -244,6 +247,13 @@ export const FoodLogPage: React.FC = () => {
           <h1 className="text-2xl font-bold text-gray-900">飲食記錄</h1>
           <p className="text-gray-600 mt-1">記錄和管理您的每日飲食</p>
         </div>
+        <Button
+          variant="outline"
+          onClick={() => setIsAnalysisModalOpen(true)}
+          leftIcon={<FiBarChart2 />}
+        >
+          AI 營養分析
+        </Button>
       </div>
 
       {/* 錯誤訊息 */}
@@ -458,6 +468,13 @@ export const FoodLogPage: React.FC = () => {
         {currentView === 'foodDetail' && renderFoodDetailView()}
         {currentView === 'createFood' && renderCreateFoodView()}
       </div>
+
+      {/* AI 營養分析模態框 */}
+      <AINutritionAnalysis
+        isOpen={isAnalysisModalOpen}
+        onClose={() => setIsAnalysisModalOpen(false)}
+        date={selectedDate}
+      />
     </MainLayout>
   );
 };

@@ -5,7 +5,7 @@
 
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FiPlus, FiTrendingUp, FiTarget, FiActivity } from 'react-icons/fi';
+import { FiPlus, FiTrendingUp, FiTarget, FiActivity, FiMessageCircle } from 'react-icons/fi';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { getNutritionRequirements, getGoal } from '../store/slices/userSlice';
 import { fetchDailySummary } from '../store/slices/foodLogSlice';
@@ -60,7 +60,7 @@ export const DashboardPage: React.FC = () => {
         </div>
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
           <Link to={ROUTES.FOOD_LOG}>
             <Card hoverable className="text-center">
               <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center mx-auto mb-3">
@@ -68,6 +68,16 @@ export const DashboardPage: React.FC = () => {
               </div>
               <h3 className="font-medium text-gray-900">記錄飲食</h3>
               <p className="text-sm text-gray-500 mt-1">新增今日飲食</p>
+            </Card>
+          </Link>
+
+          <Link to={ROUTES.AI_CHAT}>
+            <Card hoverable className="text-center">
+              <div className="w-12 h-12 bg-pink-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+                <FiMessageCircle className="w-6 h-6 text-pink-600" />
+              </div>
+              <h3 className="font-medium text-gray-900">AI 營養師</h3>
+              <p className="text-sm text-gray-500 mt-1">智能問答與分析</p>
             </Card>
           </Link>
 

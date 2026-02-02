@@ -4,11 +4,12 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { FiSearch, FiInfo, FiChevronRight } from 'react-icons/fi';
+import { FiSearch, FiInfo, FiChevronRight, FiZap } from 'react-icons/fi';
 import { useAppSelector } from '../hooks';
 import { mealService, type MealSuggestion } from '../services/mealService';
 import { Card, Button, Loading } from '../components/common';
 import { MainLayout } from '../components/layout';
+import { AIMealRecommendation } from '../components/features/ai';
 import { MEAL_TYPE_LABELS, MEAL_TYPE_ICONS } from '../constants/meal';
 import type { MealType } from '../types/meal';
 import { getToday } from '../utils/formatDate';
@@ -25,6 +26,7 @@ export const MealSuggestionPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedDate, setSelectedDate] = useState(getToday());
   const [selectedSuggestion, setSelectedSuggestion] = useState<MealSuggestion | null>(null);
+  const [isAIRecommendationOpen, setIsAIRecommendationOpen] = useState(false);
 
   // 載入餐點建議
   const loadSuggestions = async () => {
@@ -72,12 +74,22 @@ export const MealSuggestionPage: React.FC = () => {
     <MainLayout>
       <div className="space-y-6">
         {/* 標題 */}
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">餐點建議</h1>
-          <p className="text-gray-600">
-            根據您的營養需求和已攝取量，為您推薦合適的餐點
-          </p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">餐點建議</h1>
+            <p className="text-gray-600">
+              根據您的營養需求和已攝取量，為您推薦合適的餐點
+            </p>
+          </div>
+          <Button
+            variant="primary"
+            onClick={() => setIsAIRecommendationOpen(true)}
+            leftIcon={<FiZap />}
+          >
+            AI 智慧推薦
+          </Button>
         </div>
+        
 
         {/* 篩選器 */}
         <Card>
@@ -357,6 +369,14 @@ export const MealSuggestionPage: React.FC = () => {
             </Card>
           </div>
         )}
+
+        {/* AI 餐點推薦模態框 */}
+        <AIMealRecommendation
+          isOpen={isAIRecommendationOpen}
+          onClose={() => setIsAIRecommendationOpen(false)}
+          date={selectedDate}
+          mealType={selectedMealType}
+        />
       </div>
     </MainLayout>
   );
