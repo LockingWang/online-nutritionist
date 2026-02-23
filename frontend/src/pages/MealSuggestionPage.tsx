@@ -3,9 +3,10 @@
  * 根據使用者的營養需求和已攝取量，推薦合適的餐點
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FiSearch, FiInfo, FiChevronRight, FiZap } from 'react-icons/fi';
-import { useAppSelector } from '../hooks';
+import { useAppDispatch, useAppSelector } from '../hooks';
+import { getNutritionRequirements } from '../store/slices/userSlice';
 import { mealService, type MealSuggestion } from '../services/mealService';
 import { Card, Button, Loading } from '../components/common';
 import { MainLayout } from '../components/layout';
@@ -20,13 +21,15 @@ import { toast } from 'react-toastify';
 // ============================================
 
 export const MealSuggestionPage: React.FC = () => {
-  const { nutritionRequirements } = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
+  const { nutritionRequirements, isLoading: userLoading } = useAppSelector((state) => state.user);
   const [selectedMealType, setSelectedMealType] = useState<MealType>('lunch');
   const [suggestions, setSuggestions] = useState<MealSuggestion[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedDate, setSelectedDate] = useState(getToday());
   const [selectedSuggestion, setSelectedSuggestion] = useState<MealSuggestion | null>(null);
   const [isAIRecommendationOpen, setIsAIRecommendationOpen] = useState(false);
+  const hasUserDataFetched = useRef(false);
 
   // 載入餐點建議
   const loadSuggestions = async () => {
@@ -50,9 +53,20 @@ export const MealSuggestionPage: React.FC = () => {
     }
   };
 
+  // 進入頁面時先載入營養需求
   useEffect(() => {
+    dispatch(getNutritionRequirements());
+  }, [dispatch]);
+
+  // 僅在「已嘗試取得使用者資料且請求結束」後才載入餐點建議，避免重新整理時誤顯示「請先設定營養需求」
+  useEffect(() => {
+    if (userLoading) {
+      hasUserDataFetched.current = true;
+      return;
+    }
+    if (!hasUserDataFetched.current) return;
     loadSuggestions();
-  }, [selectedMealType, selectedDate]);
+  }, [selectedMealType, selectedDate, nutritionRequirements, userLoading]);
 
   // 計算剩餘營養
   const getRemainingNutrition = () => {

@@ -20,8 +20,8 @@ import {
   FoodLogPage,
   MealSuggestionPage,
   AIChatPage,
+  StatisticsPage,
 } from './pages';
-import PlaceholderPage from './pages/PlaceholderPages';
 
 // 常數
 import { ROUTES } from './constants/routes';
@@ -116,7 +116,7 @@ const App: React.FC = () => {
           path={ROUTES.STATISTICS}
           element={
             <ProtectedRoute>
-              <PlaceholderPage />
+              <StatisticsPage />
             </ProtectedRoute>
           }
         />

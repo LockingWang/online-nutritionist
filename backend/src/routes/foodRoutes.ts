@@ -54,9 +54,12 @@ const createCustomFoodSchema = z.object({
       .optional()
       .transform((val) => (val === '' ? undefined : val)),
     category: z
-      .union([z.string(), z.literal('')])
+      .union([
+        z.array(z.string()),
+        z.string().transform((s) => (s === '' ? [] : [s])),
+      ])
       .optional()
-      .transform((val) => (val === '' ? undefined : val)),
+      .default([]),
   }),
 });
 
@@ -86,9 +89,11 @@ const updateCustomFoodSchema = z.object({
       .optional()
       .transform((val) => (val === '' ? undefined : val)),
     category: z
-      .union([z.string(), z.literal('')])
-      .optional()
-      .transform((val) => (val === '' ? undefined : val)),
+      .union([
+        z.array(z.string()),
+        z.string().transform((s) => (s === '' ? [] : [s])),
+      ])
+      .optional(),
   }),
 });
 
