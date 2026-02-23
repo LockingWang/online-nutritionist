@@ -21,6 +21,26 @@ export const analyzeNutrition = async (
 ) => {
   const { date } = input;
 
+  // AI 快取：若已有同一天、同類型的分析記錄則直接回傳，避免重複呼叫 OpenAI
+  const existing = await prisma.aiAnalysis.findFirst({
+    where: {
+      userId,
+      date: new Date(date),
+      analysisType: 'nutrition_status',
+    },
+    orderBy: { createdAt: 'desc' },
+  });
+  if (existing?.inputData && existing?.aiResponse) {
+    const content = (existing.aiResponse as { content?: string })?.content;
+    if (content) {
+      return {
+        analysis: existing,
+        analysisData: existing.inputData as Record<string, unknown>,
+        aiResponse: content,
+      };
+    }
+  }
+
   // 取得使用者資料
   const userData = await getUserById(userId);
   const nutritionRequirement = userData.nutritionRequirement;

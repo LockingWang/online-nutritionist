@@ -23,6 +23,34 @@ export const getMealRecommendation = async (
   const date = input.date || new Date().toISOString().split('T')[0];
   const mealType = input.mealType;
 
+  // AI 快取：若已有同一天、同餐別的推薦記錄則直接回傳
+  const existingList = await prisma.aiAnalysis.findMany({
+    where: {
+      userId,
+      date: new Date(date),
+      analysisType: 'meal_recommendation',
+    },
+    orderBy: { createdAt: 'desc' },
+    take: 10,
+  });
+  const existing = existingList.find((r) => {
+    const stored = (r.inputData as { mealType?: string })?.mealType;
+    return (stored ?? undefined) === (mealType ?? undefined);
+  });
+  if (existing?.aiResponse) {
+    const content = (existing.aiResponse as { content?: string })?.content;
+    const inputData = existing.inputData as {
+      remainingNutrition?: Record<string, number>;
+    };
+    if (content) {
+      return {
+        analysis: existing,
+        recommendation: content,
+        remainingNutrition: inputData?.remainingNutrition ?? null,
+      };
+    }
+  }
+
   // 取得使用者資料
   const userData = await getUserById(userId);
   const nutritionRequirement = userData.nutritionRequirement;

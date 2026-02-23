@@ -223,5 +223,7 @@ model AiAnalysis {
   // 關聯
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  // 查詢優化：依 userId + date + analysisType 查既有分析（AI 快取）
+  @@index([userId, date, analysisType], name: "idx_ai_analyses_user_date_type")
   @@map("ai_analyses")
 }

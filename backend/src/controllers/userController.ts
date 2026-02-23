@@ -17,9 +17,13 @@ import {
   UpdateGoalInput,
 } from '../services/userService';
 import { successResponse, errorResponse } from '../utils/response';
+import { get as cacheGet, set as cacheSet, del as cacheDel } from '../utils/cache';
+
+const USER_CACHE_KEY = (id: string) => `user:${id}`;
+const USER_CACHE_TTL_MS = 60 * 1000; // 60 秒
 
 /**
- * 取得當前使用者完整資料
+ * 取得當前使用者完整資料（含 API 快取）
  */
 export const getMeController = async (req: Request, res: Response) => {
   try {
@@ -31,7 +35,12 @@ export const getMeController = async (req: Request, res: Response) => {
       );
     }
 
-    const result = await getUserById(userId);
+    const cacheKey = USER_CACHE_KEY(userId);
+    let result = cacheGet<Awaited<ReturnType<typeof getUserById>>>(cacheKey);
+    if (!result) {
+      result = await getUserById(userId);
+      cacheSet(cacheKey, result, USER_CACHE_TTL_MS);
+    }
 
     res.status(200).json(successResponse(result));
   } catch (error: any) {
@@ -59,6 +68,7 @@ export const updateUserController = async (req: Request, res: Response) => {
 
     const input: UpdateUserInput = req.body;
     const user = await updateUser(userId, input);
+    cacheDel(USER_CACHE_KEY(userId));
 
     res.status(200).json(
       successResponse({ user }, '使用者資料更新成功')
@@ -133,6 +143,7 @@ export const updateBodyCompositionController = async (
 
     const input: UpdateBodyCompositionInput = req.body;
     const bodyComposition = await updateBodyComposition(userId, input);
+    cacheDel(USER_CACHE_KEY(userId));
 
     res.status(200).json(
       successResponse(
@@ -194,6 +205,7 @@ export const updateGoalController = async (req: Request, res: Response) => {
     };
 
     const goal = await updateGoal(userId, input);
+    cacheDel(USER_CACHE_KEY(userId));
 
     res.status(200).json(
       successResponse({ goal }, '目標設定更新成功')

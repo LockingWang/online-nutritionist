@@ -16,40 +16,36 @@ import {
  * 取得使用者資料（包含關聯資料）
  */
 export const getUserById = async (userId: string) => {
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: {
-      id: true,
-      email: true,
-      name: true,
-      createdAt: true,
-      updatedAt: true,
-    },
-  });
+  const [user, bodyComposition, goal, nutritionRequirement] = await Promise.all([
+    prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    }),
+    prisma.bodyComposition.findFirst({
+      where: { userId },
+      orderBy: { createdAt: 'desc' },
+    }),
+    prisma.goal.findFirst({
+      where: { userId },
+      orderBy: { createdAt: 'desc' },
+    }),
+    prisma.nutritionRequirement.findFirst({
+      where: { userId },
+      orderBy: { calculatedAt: 'desc' },
+    }),
+  ]);
 
   if (!user) {
     const error: any = new Error('找不到使用者');
     error.code = 'USER_NOT_FOUND';
     throw error;
   }
-
-  // 取得最新的身體組成資料
-  const bodyComposition = await prisma.bodyComposition.findFirst({
-    where: { userId },
-    orderBy: { createdAt: 'desc' },
-  });
-
-  // 取得最新的目標設定
-  const goal = await prisma.goal.findFirst({
-    where: { userId },
-    orderBy: { createdAt: 'desc' },
-  });
-
-  // 取得最新的營養需求
-  const nutritionRequirement = await prisma.nutritionRequirement.findFirst({
-    where: { userId },
-    orderBy: { calculatedAt: 'desc' },
-  });
 
   return {
     user,
