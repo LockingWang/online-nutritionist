@@ -87,7 +87,8 @@ export const mealService = {
   async getMeals(params: GetMealsParams = {}): Promise<GetMealsResponse> {
     const queryParams = new URLSearchParams();
     if (params.mealType) queryParams.append('mealType', params.mealType);
-    if (params.category) queryParams.append('category', params.category);
+    const category = Array.isArray(params.category) ? params.category[0] : params.category;
+    if (category) queryParams.append('category', category);
     if (params.search) queryParams.append('search', params.search);
     if (params.page) queryParams.append('page', String(params.page));
     if (params.limit) queryParams.append('limit', String(params.limit));

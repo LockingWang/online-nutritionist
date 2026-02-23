@@ -5,7 +5,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { FiX, FiSearch } from 'react-icons/fi';
+import { FiSearch } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 import { Input, Button, Modal } from '../../common';
 import { FoodSearch } from './FoodSearch';
@@ -85,7 +85,6 @@ export const FoodLogForm: React.FC<FoodLogFormProps> = ({
 
   const quantity = watch('quantity');
   const unit = watch('unit');
-  const mealType = watch('mealType');
 
   // 當選擇食物時，更新表單
   useEffect(() => {
@@ -422,12 +421,16 @@ export const FoodLogForm: React.FC<FoodLogFormProps> = ({
       </Modal>
 
       {/* 食物搜尋彈窗 */}
-      <FoodSearch
-        isOpen={showFoodSearch}
-        onClose={() => setShowFoodSearch(false)}
-        onSelectFood={setSelectedFood}
-        defaultKeyword={watch('foodName')}
-      />
+      <Modal isOpen={showFoodSearch} onClose={() => setShowFoodSearch(false)} title="搜尋食物">
+        <FoodSearch
+          onSelectFood={(food) => {
+            setSelectedFood(food);
+            setShowFoodSearch(false);
+          }}
+          onCreateFood={() => {}}
+          defaultKeyword={watch('foodName')}
+        />
+      </Modal>
     </>
   );
 };

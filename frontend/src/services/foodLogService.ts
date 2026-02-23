@@ -11,7 +11,7 @@ import api from './api';
 
 export type MealType = 'breakfast' | 'lunch' | 'dinner' | 'snack';
 
-export type UnitType = 'g' | 'ml' | 'serving';
+export type UnitType = 'g' | 'ml' | 'serving' | 'kg' | 'l';
 
 export interface FoodLog {
   id: string;

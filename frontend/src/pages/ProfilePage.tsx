@@ -22,13 +22,12 @@ import {
   getGoal,
   updateGoal,
   getNutritionRequirements,
-  clearError,
 } from '../store/slices/userSlice';
 import { setAuth } from '../store/slices/authSlice';
 import { userService } from '../services/userService';
 import { Card, Button, Input, Loading } from '../components/common';
 import { MainLayout } from '../components/layout';
-import type { BodyComposition, Goal, ActivityLevel, GoalType } from '../types/user';
+import type { ActivityLevel, GoalType } from '../types/user';
 import { ACTIVITY_LEVEL_LABELS, GOAL_TYPE_LABELS } from '../types/user';
 
 // ============================================

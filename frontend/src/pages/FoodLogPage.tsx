@@ -19,7 +19,6 @@ import { useAppDispatch, useAppSelector } from '../hooks';
 import {
   fetchFoodLogs,
   createFoodLog,
-  updateFoodLog,
   deleteFoodLog,
   fetchDailySummary,
   setSelectedDate,
@@ -35,7 +34,7 @@ import { NutritionDisplay } from '../components/features/nutrition/NutritionDisp
 import { AINutritionAnalysis } from '../components/features/ai';
 import { MEAL_TYPE_LABELS, MEAL_TYPE_ICONS } from '../constants/meal';
 import { formatDate } from '../utils/formatDate';
-import type { MealType, FoodLog, CreateFoodLogInput, UpdateFoodLogInput } from '../services/foodLogService';
+import type { MealType, FoodLog, CreateFoodLogInput } from '../services/foodLogService';
 import type { Food } from '../services/foodService';
 
 // ============================================
@@ -59,7 +58,7 @@ export const FoodLogPage: React.FC = () => {
   const [currentView, setCurrentView] = useState<ViewType>('list');
   const [selectedFood, setSelectedFood] = useState<Food | null>(null);
   const [selectedMealType, setSelectedMealType] = useState<MealType | null>(null);
-  const [editingLog, setEditingLog] = useState<FoodLog | null>(null);
+  const [_editingLog, setEditingLog] = useState<FoodLog | null>(null);
   const [isAnalysisModalOpen, setIsAnalysisModalOpen] = useState(false);
 
   // 載入資料
@@ -111,20 +110,6 @@ export const FoodLogPage: React.FC = () => {
     setCurrentView('list');
     setSelectedFood(null);
     setSelectedMealType(null);
-  };
-
-  // 處理更新飲食記錄
-  const handleUpdateFoodLog = async (data: CreateFoodLogInput) => {
-    if (!editingLog) return;
-    const updateData: UpdateFoodLogInput = {
-      ...data,
-    };
-    await dispatch(updateFoodLog({ logId: editingLog.id, data: updateData })).unwrap();
-    // 重新載入資料
-    dispatch(fetchFoodLogs({ date: selectedDate }));
-    dispatch(fetchDailySummary(selectedDate));
-    setEditingLog(null);
-    setCurrentView('list');
   };
 
   // 處理刪除飲食記錄

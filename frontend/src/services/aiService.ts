@@ -6,7 +6,6 @@
 import api from './api';
 import type {
   AiChatSession,
-  CreateChatSessionResponse,
   SendMessageInput,
   SendMessageResponse,
   AnalyzeNutritionInput,

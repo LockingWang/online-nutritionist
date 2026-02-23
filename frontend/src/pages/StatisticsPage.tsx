@@ -294,8 +294,8 @@ export const StatisticsPage: React.FC = () => {
                             `${value} g`,
                             name === '攝取' ? '平均攝取' : '每日目標',
                           ]}
-                          labelFormatter={(_, payload) =>
-                            payload?.[0]?.payload?.nameFull ?? ''
+                          labelFormatter={(_: unknown, payload: unknown) =>
+                            (Array.isArray(payload) && payload[0]?.payload?.nameFull) ?? ''
                           }
                         />
                         <Legend />

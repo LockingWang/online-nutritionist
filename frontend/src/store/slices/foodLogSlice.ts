@@ -11,7 +11,6 @@ import type {
   CreateFoodLogInput,
   UpdateFoodLogInput,
   DailySummary,
-  MealType,
 } from '../../services/foodLogService';
 
 // ============================================

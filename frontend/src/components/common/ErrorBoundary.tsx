@@ -3,7 +3,8 @@
  * 捕捉子樹內 React render 錯誤，顯示 fallback 並可重新整理
  */
 
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { Component } from 'react';
+import type { ErrorInfo, ReactNode } from 'react';
 
 interface Props {
   children: ReactNode;

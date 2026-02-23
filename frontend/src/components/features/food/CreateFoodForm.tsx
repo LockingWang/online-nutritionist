@@ -89,7 +89,6 @@ export const CreateFoodForm: React.FC<CreateFoodFormProps> = ({
   const protein = watch('protein');
   const carbohydrates = watch('carbohydrates');
   const fat = watch('fat');
-  const servingSize = watch('servingSize');
 
   // 當 baseUnit 改變時，自動設置 servingSize 和 quantity
   useEffect(() => {
@@ -137,7 +136,7 @@ export const CreateFoodForm: React.FC<CreateFoodFormProps> = ({
         name: data.name,
         brand: data.brand || undefined,
         baseUnit: data.baseUnit,
-        category: data.category || undefined,
+        category: Array.isArray(data.category) ? data.category[0] : (data.category ?? undefined),
         calories: data.calories,
         protein: data.protein,
         carbohydrates: data.carbohydrates,

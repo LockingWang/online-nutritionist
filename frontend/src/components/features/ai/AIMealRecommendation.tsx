@@ -76,7 +76,7 @@ export const AIMealRecommendation: React.FC<AIMealRecommendationProps> = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="large">
+    <Modal isOpen={isOpen} onClose={onClose} size="lg">
       <div className="p-6">
         {/* 標題 */}
         <div className="flex items-center justify-between mb-6">

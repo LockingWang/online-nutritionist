@@ -40,7 +40,7 @@ export const FoodSearch: React.FC<FoodSearchProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
-  const [searchTimeout, setSearchTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [searchTimeout, setSearchTimeout] = useState<ReturnType<typeof setTimeout> | null>(null);
 
   // 搜尋食物
   const searchFoods = useCallback(async (searchKeyword: string) => {
