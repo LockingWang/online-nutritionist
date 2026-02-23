@@ -5,7 +5,13 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: true, // 監聽 0.0.0.0，可用區網 IP 從手機存取（執行時終端會顯示 Network 網址）
+    host: true,
     port: 5173,
+  },
+  test: {
+    environment: 'jsdom',
+    setupFiles: ['src/test/setup.ts'],
+    include: ['src/**/*.{test,spec}.{ts,tsx}'],
+    globals: true,
   },
 })
