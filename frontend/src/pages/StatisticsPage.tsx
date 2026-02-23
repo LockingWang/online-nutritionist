@@ -322,3 +322,5 @@ export const StatisticsPage: React.FC = () => {
     </MainLayout>
   );
 };
+
+export default StatisticsPage;

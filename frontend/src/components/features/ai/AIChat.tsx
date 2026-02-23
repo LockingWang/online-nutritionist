@@ -3,7 +3,7 @@
  * 提供與 AI 營養師對話的介面
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, memo } from 'react';
 import { FiSend, FiTrash2, FiMessageSquare, FiPlus } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 import ReactMarkdown from 'react-markdown';
@@ -21,6 +21,94 @@ interface AIChatProps {
   /** 是否顯示會話列表 */
   showSessionList?: boolean;
 }
+
+// ============================================
+// 單則訊息氣泡（memo 避免輸入時整串訊息重繪）
+// ============================================
+
+const ChatMessageBubble = memo(({ message }: { message: AiChatMessage }) => (
+  <div
+    className={`flex ${
+      message.role === 'user' ? 'justify-end' : 'justify-start'
+    }`}
+  >
+    <div
+      className={`
+        max-w-[80%] rounded-lg px-4 py-2
+        ${
+          message.role === 'user'
+            ? 'bg-blue-500 text-white'
+            : 'bg-gray-100 text-gray-900'
+        }
+      `}
+    >
+      {message.role === 'assistant' ? (
+        <div className="prose prose-sm max-w-none">
+          <ReactMarkdown
+            components={{
+              h1: ({ node, ...props }) => (
+                <h1 className="text-xl font-bold mb-2 text-gray-900" {...props} />
+              ),
+              h2: ({ node, ...props }) => (
+                <h2 className="text-lg font-semibold mb-2 text-gray-900" {...props} />
+              ),
+              h3: ({ node, ...props }) => (
+                <h3 className="text-base font-semibold mb-1 text-gray-900" {...props} />
+              ),
+              p: ({ node, ...props }) => (
+                <p className="mb-2 leading-relaxed text-gray-700" {...props} />
+              ),
+              ul: ({ node, ...props }) => (
+                <ul className="list-disc list-inside mb-2 space-y-1 text-gray-700" {...props} />
+              ),
+              ol: ({ node, ...props }) => (
+                <ol className="list-decimal list-inside mb-2 space-y-1 text-gray-700" {...props} />
+              ),
+              li: ({ node, ...props }) => (
+                <li className="ml-2" {...props} />
+              ),
+              strong: ({ node, ...props }) => (
+                <strong className="font-semibold text-gray-900" {...props} />
+              ),
+              em: ({ node, ...props }) => (
+                <em className="italic" {...props} />
+              ),
+              code: ({ node, ...props }) => (
+                <code className="bg-gray-200 px-1 py-0.5 rounded text-sm font-mono text-gray-800" {...props} />
+              ),
+              blockquote: ({ node, ...props }) => (
+                <blockquote className="border-l-4 border-gray-300 pl-3 italic my-2 text-gray-600" {...props} />
+              ),
+            }}
+          >
+            {message.content}
+          </ReactMarkdown>
+        </div>
+      ) : (
+        <div className="whitespace-pre-wrap break-words">
+          {message.content}
+        </div>
+      )}
+      <div
+        className={`
+          text-xs mt-1
+          ${
+            message.role === 'user'
+              ? 'text-blue-100'
+              : 'text-gray-500'
+          }
+        `}
+      >
+        {new Date(message.createdAt).toLocaleTimeString('zh-TW', {
+          hour: '2-digit',
+          minute: '2-digit',
+        })}
+      </div>
+    </div>
+  </div>
+));
+
+ChatMessageBubble.displayName = 'ChatMessageBubble';
 
 // ============================================
 // 元件
@@ -294,86 +382,7 @@ export const AIChat: React.FC<AIChatProps> = ({
                   </div>
                 ) : (
                   messages.map((message) => (
-                    <div
-                      key={message.id}
-                      className={`flex ${
-                        message.role === 'user' ? 'justify-end' : 'justify-start'
-                      }`}
-                    >
-                      <div
-                        className={`
-                          max-w-[80%] rounded-lg px-4 py-2
-                          ${
-                            message.role === 'user'
-                              ? 'bg-blue-500 text-white'
-                              : 'bg-gray-100 text-gray-900'
-                          }
-                        `}
-                      >
-                        {message.role === 'assistant' ? (
-                          <div className="prose prose-sm max-w-none">
-                            <ReactMarkdown
-                              components={{
-                                h1: ({ node, ...props }) => (
-                                  <h1 className="text-xl font-bold mb-2 text-gray-900" {...props} />
-                                ),
-                                h2: ({ node, ...props }) => (
-                                  <h2 className="text-lg font-semibold mb-2 text-gray-900" {...props} />
-                                ),
-                                h3: ({ node, ...props }) => (
-                                  <h3 className="text-base font-semibold mb-1 text-gray-900" {...props} />
-                                ),
-                                p: ({ node, ...props }) => (
-                                  <p className="mb-2 leading-relaxed text-gray-700" {...props} />
-                                ),
-                                ul: ({ node, ...props }) => (
-                                  <ul className="list-disc list-inside mb-2 space-y-1 text-gray-700" {...props} />
-                                ),
-                                ol: ({ node, ...props }) => (
-                                  <ol className="list-decimal list-inside mb-2 space-y-1 text-gray-700" {...props} />
-                                ),
-                                li: ({ node, ...props }) => (
-                                  <li className="ml-2" {...props} />
-                                ),
-                                strong: ({ node, ...props }) => (
-                                  <strong className="font-semibold text-gray-900" {...props} />
-                                ),
-                                em: ({ node, ...props }) => (
-                                  <em className="italic" {...props} />
-                                ),
-                                code: ({ node, ...props }) => (
-                                  <code className="bg-gray-200 px-1 py-0.5 rounded text-sm font-mono text-gray-800" {...props} />
-                                ),
-                                blockquote: ({ node, ...props }) => (
-                                  <blockquote className="border-l-4 border-gray-300 pl-3 italic my-2 text-gray-600" {...props} />
-                                ),
-                              }}
-                            >
-                              {message.content}
-                            </ReactMarkdown>
-                          </div>
-                        ) : (
-                          <div className="whitespace-pre-wrap break-words">
-                            {message.content}
-                          </div>
-                        )}
-                        <div
-                          className={`
-                            text-xs mt-1
-                            ${
-                              message.role === 'user'
-                                ? 'text-blue-100'
-                                : 'text-gray-500'
-                            }
-                          `}
-                        >
-                          {new Date(message.createdAt).toLocaleTimeString('zh-TW', {
-                            hour: '2-digit',
-                            minute: '2-digit',
-                          })}
-                        </div>
-                      </div>
-                    </div>
+                    <ChatMessageBubble key={message.id} message={message} />
                   ))
                 )}
                 {isSending && (

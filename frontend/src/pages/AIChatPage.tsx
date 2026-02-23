@@ -22,3 +22,5 @@ export const AIChatPage: React.FC = () => {
     </MainLayout>
   );
 };
+
+export default AIChatPage;

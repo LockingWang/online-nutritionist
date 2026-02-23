@@ -3,7 +3,7 @@
  * 設定路由和全域 Provider
  */
 
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -11,20 +11,28 @@ import 'react-toastify/dist/ReactToastify.css';
 // 路由守衛
 import { ProtectedRoute, PublicRoute } from './components/layout';
 
-// 頁面
-import {
-  LoginPage,
-  RegisterPage,
-  DashboardPage,
-  ProfilePage,
-  FoodLogPage,
-  MealSuggestionPage,
-  AIChatPage,
-  StatisticsPage,
-} from './pages';
+// 頁面：程式碼分割，僅在進入該路由時才載入對應 chunk
+const LoginPage = lazy(() => import('./pages/LoginPage'));
+const RegisterPage = lazy(() => import('./pages/RegisterPage'));
+const DashboardPage = lazy(() => import('./pages/DashboardPage'));
+const ProfilePage = lazy(() => import('./pages/ProfilePage'));
+const FoodLogPage = lazy(() => import('./pages/FoodLogPage'));
+const MealSuggestionPage = lazy(() => import('./pages/MealSuggestionPage'));
+const AIChatPage = lazy(() => import('./pages/AIChatPage'));
+const StatisticsPage = lazy(() => import('./pages/StatisticsPage'));
 
 // 常數
 import { ROUTES } from './constants/routes';
+
+// 路由載入中的 fallback
+const PageFallback = (
+  <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="text-center">
+      <div className="w-10 h-10 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+      <p className="text-gray-600">載入中...</p>
+    </div>
+  </div>
+);
 
 // ============================================
 // App 元件
@@ -47,86 +55,88 @@ const App: React.FC = () => {
         theme="light"
       />
 
-      {/* 路由設定 */}
-      <Routes>
-        {/* 公開路由 */}
-        <Route
-          path={ROUTES.HOME}
-          element={<Navigate to={ROUTES.LOGIN} replace />}
-        />
-        <Route
-          path={ROUTES.LOGIN}
-          element={
-            <PublicRoute>
-              <LoginPage />
-            </PublicRoute>
-          }
-        />
-        <Route
-          path={ROUTES.REGISTER}
-          element={
-            <PublicRoute>
-              <RegisterPage />
-            </PublicRoute>
-          }
-        />
+      {/* 路由設定（Suspense 包住以支援 lazy 載入） */}
+      <Suspense fallback={PageFallback}>
+        <Routes>
+          {/* 公開路由 */}
+          <Route
+            path={ROUTES.HOME}
+            element={<Navigate to={ROUTES.LOGIN} replace />}
+          />
+          <Route
+            path={ROUTES.LOGIN}
+            element={
+              <PublicRoute>
+                <LoginPage />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path={ROUTES.REGISTER}
+            element={
+              <PublicRoute>
+                <RegisterPage />
+              </PublicRoute>
+            }
+          />
 
-        {/* 受保護路由 */}
-        <Route
-          path={ROUTES.DASHBOARD}
-          element={
-            <ProtectedRoute>
-              <DashboardPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path={ROUTES.PROFILE}
-          element={
-            <ProtectedRoute>
-              <ProfilePage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path={ROUTES.FOOD_LOG}
-          element={
-            <ProtectedRoute>
-              <FoodLogPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path={ROUTES.MEAL_SUGGESTION}
-          element={
-            <ProtectedRoute>
-              <MealSuggestionPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path={ROUTES.AI_CHAT}
-          element={
-            <ProtectedRoute>
-              <AIChatPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path={ROUTES.STATISTICS}
-          element={
-            <ProtectedRoute>
-              <StatisticsPage />
-            </ProtectedRoute>
-          }
-        />
+          {/* 受保護路由 */}
+          <Route
+            path={ROUTES.DASHBOARD}
+            element={
+              <ProtectedRoute>
+                <DashboardPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.PROFILE}
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.FOOD_LOG}
+            element={
+              <ProtectedRoute>
+                <FoodLogPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.MEAL_SUGGESTION}
+            element={
+              <ProtectedRoute>
+                <MealSuggestionPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.AI_CHAT}
+            element={
+              <ProtectedRoute>
+                <AIChatPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.STATISTICS}
+            element={
+              <ProtectedRoute>
+                <StatisticsPage />
+              </ProtectedRoute>
+            }
+          />
 
-        {/* 404 頁面 */}
-        <Route
-          path="*"
-          element={<Navigate to={ROUTES.DASHBOARD} replace />}
-        />
-      </Routes>
+          {/* 404 頁面 */}
+          <Route
+            path="*"
+            element={<Navigate to={ROUTES.DASHBOARD} replace />}
+          />
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   );
 };

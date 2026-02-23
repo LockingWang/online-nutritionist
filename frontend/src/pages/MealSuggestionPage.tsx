@@ -220,6 +220,7 @@ export const MealSuggestionPage: React.FC = () => {
                       src={suggestion.imageUrl}
                       alt={suggestion.name}
                       className="w-24 h-24 object-cover rounded-lg"
+                      loading="lazy"
                     />
                   ) : (
                     <div className="w-24 h-24 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-lg flex items-center justify-center">
