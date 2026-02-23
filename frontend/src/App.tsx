@@ -11,6 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 // 路由守衛與登入狀態同步（跨裝置取得最新使用者資料）
 import { ProtectedRoute, PublicRoute } from './components/layout';
 import { AuthSync } from './components/layout/AuthSync';
+import { ErrorBoundary } from './components/common';
 
 // 頁面：程式碼分割，僅在進入該路由時才載入對應 chunk
 const LoginPage = lazy(() => import('./pages/LoginPage'));
@@ -58,8 +59,9 @@ const App: React.FC = () => {
         theme="light"
       />
 
-      {/* 路由設定（Suspense 包住以支援 lazy 載入） */}
-      <Suspense fallback={PageFallback}>
+      {/* 路由設定（ErrorBoundary 捕捉 render 錯誤；Suspense 支援 lazy 載入） */}
+      <ErrorBoundary>
+        <Suspense fallback={PageFallback}>
         <Routes>
           {/* 公開路由 */}
           <Route
@@ -139,7 +141,8 @@ const App: React.FC = () => {
             element={<Navigate to={ROUTES.DASHBOARD} replace />}
           />
         </Routes>
-      </Suspense>
+        </Suspense>
+      </ErrorBoundary>
     </BrowserRouter>
   );
 };

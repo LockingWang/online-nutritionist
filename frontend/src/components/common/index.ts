@@ -16,3 +16,5 @@ export type { ModalProps } from './Modal';
 
 export { Loading, Spinner, LoadingOverlay, PageLoading, Skeleton } from './Loading';
 export type { LoadingProps, LoadingOverlayProps } from './Loading';
+
+export { ErrorBoundary } from './ErrorBoundary';
