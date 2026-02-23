@@ -3,7 +3,7 @@
  * 顯示營養攝取趨勢與期間統計
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   LineChart,
   Line,
@@ -23,6 +23,21 @@ import { Card, Button, Loading } from '../components/common';
 import { statisticsService, type StatisticsOverview } from '../services/statisticsService';
 import { formatDate, getToday } from '../utils/formatDate';
 
+/** 依視窗寬度判斷是否為窄螢幕（用於圖表左側留白與 Y 軸寬度） */
+function useIsNarrow() {
+  const [isNarrow, setIsNarrow] = useState(
+    typeof window !== 'undefined' && window.innerWidth < 640
+  );
+  useEffect(() => {
+    const mql = window.matchMedia('(max-width: 639px)');
+    const handler = () => setIsNarrow(mql.matches);
+    handler();
+    mql.addEventListener('change', handler);
+    return () => mql.removeEventListener('change', handler);
+  }, []);
+  return isNarrow;
+}
+
 // 取得預設日期範圍（過去 7 天）
 const getDefaultDateRange = () => {
   const end = new Date();
@@ -40,6 +55,7 @@ export const StatisticsPage: React.FC = () => {
   const [endDate, setEndDate] = useState(defaultRange.endDate);
   const [data, setData] = useState<StatisticsOverview | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const isNarrow = useIsNarrow();
 
   const loadOverview = async () => {
     if (!startDate || !endDate) return;
@@ -78,60 +94,65 @@ export const StatisticsPage: React.FC = () => {
     目標: data.nutritionTarget ? Math.round(data.nutritionTarget.dailyCalories) : null,
   })) ?? [];
 
-  // 三大營養素每日平均長條圖用
-  const macroChartData = data?.periodSummary.dailySummaries.length
-    ? [
-        {
-          name: '蛋白質',
-          攝取: Math.round(data.periodSummary.periodAverage.protein),
-          目標: data.nutritionTarget ? Math.round(data.nutritionTarget.protein) : 0,
-        },
-        {
-          name: '碳水化合物',
-          攝取: Math.round(data.periodSummary.periodAverage.carbohydrates),
-          目標: data.nutritionTarget ? Math.round(data.nutritionTarget.carbohydrates) : 0,
-        },
-        {
-          name: '脂肪',
-          攝取: Math.round(data.periodSummary.periodAverage.fat),
-          目標: data.nutritionTarget ? Math.round(data.nutritionTarget.fat) : 0,
-        },
-      ]
-    : [];
+  // 三大營養素每日平均長條圖用（窄螢幕用縮短名稱以減少 Y 軸寬度）
+  const macroChartData = useMemo(() => {
+    if (!data?.periodSummary.dailySummaries.length) return [];
+    const shortName = isNarrow;
+    return [
+      {
+        name: shortName ? '蛋白' : '蛋白質',
+        nameFull: '蛋白質',
+        攝取: Math.round(data.periodSummary.periodAverage.protein),
+        目標: data.nutritionTarget ? Math.round(data.nutritionTarget.protein) : 0,
+      },
+      {
+        name: shortName ? '碳水' : '碳水化合物',
+        nameFull: '碳水化合物',
+        攝取: Math.round(data.periodSummary.periodAverage.carbohydrates),
+        目標: data.nutritionTarget ? Math.round(data.nutritionTarget.carbohydrates) : 0,
+      },
+      {
+        name: shortName ? '脂肪' : '脂肪',
+        nameFull: '脂肪',
+        攝取: Math.round(data.periodSummary.periodAverage.fat),
+        目標: data.nutritionTarget ? Math.round(data.nutritionTarget.fat) : 0,
+      },
+    ];
+  }, [data, isNarrow]);
 
   return (
     <MainLayout>
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">統計分析</h1>
-          <p className="text-gray-600 mt-1">查看營養攝取趨勢與期間統計</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">統計分析</h1>
+          <p className="text-gray-600 mt-0.5 sm:mt-1 text-sm sm:text-base">查看營養攝取趨勢與期間統計</p>
         </div>
 
-        {/* 日期範圍 */}
+        {/* 日期範圍：手機垂直排列、觸控友善 */}
         <Card>
-          <div className="flex flex-wrap items-end gap-4">
-            <div className="flex items-center gap-2">
-              <FiCalendar className="w-5 h-5 text-emerald-600" />
+          <div className="flex flex-col sm:flex-row flex-wrap sm:items-end gap-3 sm:gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-2 w-full sm:w-auto">
+              <FiCalendar className="w-5 h-5 text-emerald-600 shrink-0 hidden sm:block" />
               <label className="text-sm font-medium text-gray-700">開始日期</label>
               <input
                 type="date"
                 value={startDate}
                 max={getToday()}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                className="w-full sm:w-auto px-3 py-2.5 min-h-[44px] border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
               />
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-2 w-full sm:w-auto">
               <label className="text-sm font-medium text-gray-700">結束日期</label>
               <input
                 type="date"
                 value={endDate}
                 max={getToday()}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                className="w-full sm:w-auto px-3 py-2.5 min-h-[44px] border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
               />
             </div>
-            <Button onClick={loadOverview} disabled={isLoading}>
+            <Button onClick={loadOverview} disabled={isLoading} className="min-h-[44px] w-full sm:w-auto">
               {isLoading ? '載入中...' : '查詢'}
             </Button>
           </div>
@@ -201,7 +222,7 @@ export const StatisticsPage: React.FC = () => {
                     此期間尚無飲食記錄
                   </div>
                 ) : (
-                  <div className="h-80">
+                  <div className="h-64 sm:h-72 md:h-80">
                     <ResponsiveContainer width="100%" height="100%">
                       <LineChart data={calorieChartData} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
                         <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
@@ -248,21 +269,34 @@ export const StatisticsPage: React.FC = () => {
                   subtitle="期間內每日平均攝取與設定的每日目標"
                 />
                 <Card.Body>
-                  <div className="h-72">
+                  <div className="h-64 sm:h-72">
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart
                         data={macroChartData}
                         layout="vertical"
-                        margin={{ top: 5, right: 30, left: 80, bottom: 5 }}
+                        margin={{
+                          top: 5,
+                          right: 10,
+                          left: isNarrow ? 36 : 80,
+                          bottom: 5,
+                        }}
                       >
                         <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                        <XAxis type="number" tick={{ fontSize: 12 }} />
-                        <YAxis type="category" dataKey="name" width={70} tick={{ fontSize: 12 }} />
+                        <XAxis type="number" tick={{ fontSize: isNarrow ? 10 : 12 }} />
+                        <YAxis
+                          type="category"
+                          dataKey="name"
+                          width={isNarrow ? 32 : 70}
+                          tick={{ fontSize: isNarrow ? 10 : 12 }}
+                        />
                         <Tooltip
                           formatter={(value: number, name: string) => [
                             `${value} g`,
                             name === '攝取' ? '平均攝取' : '每日目標',
                           ]}
+                          labelFormatter={(_, payload) =>
+                            payload?.[0]?.payload?.nameFull ?? ''
+                          }
                         />
                         <Legend />
                         <Bar dataKey="攝取" fill="#3b82f6" name="平均攝取" radius={[0, 4, 4, 0]} />

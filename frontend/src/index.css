@@ -30,6 +30,9 @@ body {
   background-color: #f9fafb;
   color: #111827;
   overflow-x: hidden; /* 防止水平滾動 */
+  /* 觸控優化：減少點擊高亮延遲 */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 #root {
@@ -210,4 +213,38 @@ input[type="date"]::-moz-clear {
 
 .slide-in-from-bottom {
   animation-name: slide-in-from-bottom;
+}
+
+/* ============================================
+ * 響應式與安全區域
+ * ============================================ */
+
+/* 安全區域（劉海、Home 指示條） */
+.safe-area-top {
+  padding-top: env(safe-area-inset-top, 0);
+}
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+/* 觸控友善：最小點擊區域約 44px（Apple HIG） */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+@media (pointer: fine) {
+  .touch-target {
+    min-height: 0;
+    min-width: 0;
+  }
+}
+
+/* 主內容區在手機上預留固定 header 高度與安全區域 */
+.main-content-pt {
+  padding-top: calc(3.5rem + env(safe-area-inset-top, 0px));
+}
+@media (min-width: 1024px) {
+  .main-content-pt {
+    padding-top: 0;
+  }
 }

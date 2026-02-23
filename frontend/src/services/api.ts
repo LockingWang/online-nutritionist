@@ -1,6 +1,14 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+// 開發時依「目前頁面」的 host 打後端：電腦開 localhost:5173 → 打 localhost:3000；手機開 192.168.x.x:5173 → 打 192.168.x.x:3000
+function getApiBaseUrl(): string {
+  if (import.meta.env.DEV && typeof window !== 'undefined') {
+    return `${window.location.protocol}//${window.location.hostname}:3000/api`;
+  }
+  return import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+}
+
+const API_URL = getApiBaseUrl();
 
 // 不需要自動處理 401 的 API 路徑（登入、註冊等認證相關 API）
 const AUTH_ENDPOINTS = ['/auth/login', '/auth/register'];

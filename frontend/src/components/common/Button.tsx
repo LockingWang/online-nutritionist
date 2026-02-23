@@ -65,9 +65,9 @@ const variantStyles = {
 };
 
 const sizeStyles = {
-  sm: 'px-3 py-1.5 text-sm gap-1.5',
-  md: 'px-4 py-2 text-base gap-2',
-  lg: 'px-6 py-3 text-lg gap-2.5',
+  sm: 'px-3 py-2 min-h-[36px] text-sm gap-1.5',
+  md: 'px-4 py-2.5 min-h-[44px] text-base gap-2',
+  lg: 'px-6 py-3 min-h-[48px] text-lg gap-2.5',
 };
 
 // ============================================

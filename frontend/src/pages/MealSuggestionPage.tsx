@@ -86,18 +86,19 @@ export const MealSuggestionPage: React.FC = () => {
 
   return (
     <MainLayout>
-      <div className="space-y-6">
-        {/* 標題 */}
-        <div className="flex items-center justify-between">
+      <div className="space-y-4 sm:space-y-6">
+        {/* 標題：手機垂直排列 */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">餐點建議</h1>
-            <p className="text-gray-600">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">餐點建議</h1>
+            <p className="text-gray-600 text-sm sm:text-base">
               根據您的營養需求和已攝取量，為您推薦合適的餐點
             </p>
           </div>
           <Button
             variant="primary"
             onClick={() => setIsAIRecommendationOpen(true)}
+            className="min-h-[44px] w-full sm:w-auto shrink-0"
             leftIcon={<FiZap />}
           >
             AI 智慧推薦
@@ -117,7 +118,7 @@ export const MealSuggestionPage: React.FC = () => {
                 type="date"
                 value={selectedDate}
                 onChange={(e) => setSelectedDate(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                className="w-full px-4 py-2.5 min-h-[44px] border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
               />
             </div>
 
@@ -126,7 +127,7 @@ export const MealSuggestionPage: React.FC = () => {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 選擇餐別
               </label>
-              <div className="grid grid-cols-4 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {(['breakfast', 'lunch', 'dinner', 'snack'] as MealType[]).map(
                   (type) => (
                     <button

@@ -115,12 +115,16 @@ const authSlice = createSlice({
     },
 
     /**
-     * 設定認證狀態（用於初始化）
+     * 設定認證狀態（用於初始化或更新使用者資料，如編輯名稱後同步 Redux + localStorage）
      */
     setAuth: (state, action: PayloadAction<{ user: User; token: string }>) => {
       state.user = action.payload.user;
       state.token = action.payload.token;
       state.isAuthenticated = true;
+      localStorage.setItem('user', JSON.stringify(action.payload.user));
+      if (action.payload.token) {
+        localStorage.setItem('token', action.payload.token);
+      }
     },
   },
   extraReducers: (builder) => {

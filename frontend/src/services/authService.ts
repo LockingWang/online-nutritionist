@@ -48,11 +48,11 @@ export const authService = {
   },
 
   /**
-   * 取得當前使用者資訊
+   * 取得當前使用者資訊（後端 /users/me 回傳 { user, bodyComposition, goal, nutritionRequirement }，只取 user）
    */
   async getCurrentUser(): Promise<User> {
     const response = await api.get('/users/me');
-    return response.data.data;
+    return response.data.data.user;
   },
 
   /**

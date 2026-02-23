@@ -47,7 +47,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 
     const inputClasses = `
       block rounded-lg border
-      px-4 py-2.5
+      px-4 py-2.5 min-h-[44px]
       text-gray-900 placeholder-gray-400
       transition-all duration-200
       focus:outline-none focus:ring-2

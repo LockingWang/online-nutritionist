@@ -164,12 +164,10 @@ export const ProfilePage: React.FC = () => {
     }
     try {
       const result = await userService.updateProfile({ name: profileName });
-      // 更新 Redux state 中的使用者資訊
-      if (user) {
-        const token = localStorage.getItem('token');
-        if (token) {
-          dispatch(setAuth({ user: { ...user, name: result.name }, token }));
-        }
+      // 後端回傳完整 user，同步更新 Redux 與 localStorage
+      const token = localStorage.getItem('token');
+      if (result.user && token) {
+        dispatch(setAuth({ user: result.user, token }));
       }
       toast.success('個人資料更新成功');
       setIsEditingProfile(false);
@@ -205,11 +203,11 @@ export const ProfilePage: React.FC = () => {
 
   return (
     <MainLayout>
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         {/* 頁面標題 */}
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">個人資料</h1>
-          <p className="text-gray-600 mt-1">管理您的個人資訊、身體組成和目標設定</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">個人資料</h1>
+          <p className="text-gray-600 mt-0.5 sm:mt-1 text-sm sm:text-base">管理您的個人資訊、身體組成和目標設定</p>
         </div>
 
         {/* 錯誤訊息 */}

@@ -34,7 +34,7 @@ const ChatMessageBubble = memo(({ message }: { message: AiChatMessage }) => (
   >
     <div
       className={`
-        max-w-[80%] rounded-lg px-4 py-2
+        max-w-[90%] sm:max-w-[80%] rounded-lg px-3 py-2.5 sm:px-4 sm:py-2
         ${
           message.role === 'user'
             ? 'bg-blue-500 text-white'
@@ -265,10 +265,10 @@ export const AIChat: React.FC<AIChatProps> = ({
   }, [messages]);
 
   return (
-    <div className="flex h-full gap-4">
-      {/* 會話列表側邊欄 */}
+    <div className="flex flex-col md:flex-row h-full gap-0 md:gap-4">
+      {/* 會話列表側邊欄：平板以上顯示 */}
       {showSessionList && (
-        <div className="w-64 flex-shrink-0">
+        <div className="hidden md:block w-64 flex-shrink-0">
           <Card className="h-full flex flex-col">
             <div className="flex items-center justify-between p-4 border-b">
               <h2 className="text-lg font-semibold">聊天會話</h2>
@@ -399,8 +399,8 @@ export const AIChat: React.FC<AIChatProps> = ({
                 <div ref={messagesEndRef} />
               </div>
 
-              {/* 輸入區域 */}
-              <div className="border-t p-4">
+              {/* 輸入區域：觸控友善間距與按鈕 */}
+              <div className="border-t p-3 sm:p-4">
                 <div className="flex gap-2">
                   <Input
                     ref={inputRef}
@@ -410,11 +410,13 @@ export const AIChat: React.FC<AIChatProps> = ({
                     placeholder="輸入您的問題..."
                     disabled={isSending}
                     fullWidth
+                    className="min-h-[44px]"
                   />
                   <Button
                     onClick={handleSendMessage}
                     disabled={!inputValue.trim() || isSending}
                     leftIcon={<FiSend />}
+                    className="min-h-[44px] shrink-0"
                   >
                     發送
                   </Button>

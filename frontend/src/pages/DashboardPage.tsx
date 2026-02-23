@@ -48,66 +48,66 @@ export const DashboardPage: React.FC = () => {
 
   return (
     <MainLayout>
-      <div className="space-y-6">
-        {/* Welcome Section */}
-        <div className="bg-gradient-to-r from-emerald-500 to-teal-600 rounded-2xl p-6 text-white">
-          <h1 className="text-2xl font-bold mb-2">
+      <div className="space-y-4 sm:space-y-6">
+        {/* Welcome Section：手機縮排與字級 */}
+        <div className="bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-white">
+          <h1 className="text-xl sm:text-2xl md:text-2xl font-bold mb-1 sm:mb-2">
             歡迎回來，{user?.name || '使用者'}！
           </h1>
-          <p className="text-emerald-100">
+          <p className="text-sm sm:text-base text-emerald-100">
             今天是美好的一天，讓我們一起追蹤您的營養攝取吧！
           </p>
         </div>
 
-        {/* Quick Actions */}
-        <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+        {/* Quick Actions：手機 2 欄、平板 3 欄、桌面 5 欄 */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
           <Link to={ROUTES.FOOD_LOG}>
-            <Card hoverable className="text-center">
-              <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center mx-auto mb-3">
-                <FiPlus className="w-6 h-6 text-emerald-600" />
+            <Card hoverable className="text-center p-4 sm:p-5 min-h-[120px] flex flex-col justify-center">
+              <div className="w-11 h-11 sm:w-12 sm:h-12 bg-emerald-100 rounded-xl flex items-center justify-center mx-auto mb-2 sm:mb-3">
+                <FiPlus className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-600" />
               </div>
-              <h3 className="font-medium text-gray-900">記錄飲食</h3>
-              <p className="text-sm text-gray-500 mt-1">新增今日飲食</p>
+              <h3 className="font-medium text-gray-900 text-sm sm:text-base">記錄飲食</h3>
+              <p className="text-xs sm:text-sm text-gray-500 mt-0.5 sm:mt-1">新增今日飲食</p>
             </Card>
           </Link>
 
           <Link to={ROUTES.AI_CHAT}>
-            <Card hoverable className="text-center">
-              <div className="w-12 h-12 bg-pink-100 rounded-xl flex items-center justify-center mx-auto mb-3">
-                <FiMessageCircle className="w-6 h-6 text-pink-600" />
+            <Card hoverable className="text-center p-4 sm:p-5 min-h-[120px] flex flex-col justify-center">
+              <div className="w-11 h-11 sm:w-12 sm:h-12 bg-pink-100 rounded-xl flex items-center justify-center mx-auto mb-2 sm:mb-3">
+                <FiMessageCircle className="w-5 h-5 sm:w-6 sm:h-6 text-pink-600" />
               </div>
-              <h3 className="font-medium text-gray-900">AI 營養師</h3>
-              <p className="text-sm text-gray-500 mt-1">智能問答與分析</p>
+              <h3 className="font-medium text-gray-900 text-sm sm:text-base">AI 營養師</h3>
+              <p className="text-xs sm:text-sm text-gray-500 mt-0.5 sm:mt-1">智能問答與分析</p>
             </Card>
           </Link>
 
           <Link to={ROUTES.STATISTICS}>
-            <Card hoverable className="text-center">
-              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-3">
-                <FiTrendingUp className="w-6 h-6 text-blue-600" />
+            <Card hoverable className="text-center p-4 sm:p-5 min-h-[120px] flex flex-col justify-center">
+              <div className="w-11 h-11 sm:w-12 sm:h-12 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-2 sm:mb-3">
+                <FiTrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
               </div>
-              <h3 className="font-medium text-gray-900">查看統計</h3>
-              <p className="text-sm text-gray-500 mt-1">營養攝取分析</p>
+              <h3 className="font-medium text-gray-900 text-sm sm:text-base">查看統計</h3>
+              <p className="text-xs sm:text-sm text-gray-500 mt-0.5 sm:mt-1">營養攝取分析</p>
             </Card>
           </Link>
 
           <Link to={ROUTES.PROFILE}>
-            <Card hoverable className="text-center">
-              <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-3">
-                <FiTarget className="w-6 h-6 text-purple-600" />
+            <Card hoverable className="text-center p-4 sm:p-5 min-h-[120px] flex flex-col justify-center">
+              <div className="w-11 h-11 sm:w-12 sm:h-12 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-2 sm:mb-3">
+                <FiTarget className="w-5 h-5 sm:w-6 sm:h-6 text-purple-600" />
               </div>
-              <h3 className="font-medium text-gray-900">設定目標</h3>
-              <p className="text-sm text-gray-500 mt-1">調整營養目標</p>
+              <h3 className="font-medium text-gray-900 text-sm sm:text-base">設定目標</h3>
+              <p className="text-xs sm:text-sm text-gray-500 mt-0.5 sm:mt-1">調整營養目標</p>
             </Card>
           </Link>
 
           <Link to={ROUTES.MEAL_SUGGESTION}>
-            <Card hoverable className="text-center">
-              <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mx-auto mb-3">
-                <FiActivity className="w-6 h-6 text-orange-600" />
+            <Card hoverable className="text-center p-4 sm:p-5 min-h-[120px] flex flex-col justify-center">
+              <div className="w-11 h-11 sm:w-12 sm:h-12 bg-orange-100 rounded-xl flex items-center justify-center mx-auto mb-2 sm:mb-3">
+                <FiActivity className="w-5 h-5 sm:w-6 sm:h-6 text-orange-600" />
               </div>
-              <h3 className="font-medium text-gray-900">餐點建議</h3>
-              <p className="text-sm text-gray-500 mt-1">AI 智慧推薦</p>
+              <h3 className="font-medium text-gray-900 text-sm sm:text-base">餐點建議</h3>
+              <p className="text-xs sm:text-sm text-gray-500 mt-0.5 sm:mt-1">AI 智慧推薦</p>
             </Card>
           </Link>
         </div>
@@ -136,7 +136,7 @@ export const DashboardPage: React.FC = () => {
             {userLoading ? (
               <Loading text="載入中..." />
             ) : nutritionRequirements ? (
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
                 <div className="bg-red-50 rounded-xl p-4">
                   <p className="text-sm text-red-600 mb-1">熱量</p>
                   <p className="text-2xl font-bold text-red-700">

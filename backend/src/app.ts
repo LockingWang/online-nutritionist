@@ -70,9 +70,10 @@ const startServer = async () => {
     // 連接資料庫
     await connectDatabase();
 
-    // 啟動 Express 伺服器
-    app.listen(env.PORT, () => {
+    // 啟動 Express 伺服器（監聽 0.0.0.0 讓區網內設備如手機可連線）
+    app.listen(env.PORT, '0.0.0.0', () => {
       console.log(`🚀 伺服器運行在 http://localhost:${env.PORT}`);
+      console.log(`🌐 區網存取: http://<本機IP>:${env.PORT} （用手機連線時前端會自動打此 IP）`);
       console.log(`📝 環境: ${env.NODE_ENV}`);
       if (!env.OPENAI_API_KEY) {
         console.warn('⚠️  警告: OPENAI_API_KEY 未設定，AI 功能將無法使用');

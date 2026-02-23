@@ -58,15 +58,15 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-50 to-teal-100 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-50 to-teal-100 px-4 py-6 safe-area-top safe-area-bottom">
       <div className="w-full max-w-md">
         {/* Logo */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-emerald-600 rounded-2xl mb-4">
-            <span className="text-white font-bold text-2xl">N</span>
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-emerald-600 rounded-xl sm:rounded-2xl mb-3 sm:mb-4">
+            <span className="text-white font-bold text-xl sm:text-2xl">N</span>
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">營養管理系統</h1>
-          <p className="text-gray-600 mt-2">登入您的帳戶</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">營養管理系統</h1>
+          <p className="text-gray-600 mt-1 sm:mt-2 text-sm sm:text-base">登入您的帳戶</p>
         </div>
 
         {/* Login Form */}
@@ -114,7 +114,8 @@ export const LoginPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-9 text-gray-400 hover:text-gray-600"
+                className="absolute right-3 top-[2.25rem] min-w-[44px] min-h-[44px] flex items-center justify-center -mr-2 text-gray-400 hover:text-gray-600 rounded-lg"
+                aria-label={showPassword ? '隱藏密碼' : '顯示密碼'}
               >
                 {showPassword ? (
                   <FiEyeOff className="w-5 h-5" />
@@ -124,11 +125,12 @@ export const LoginPage: React.FC = () => {
               </button>
             </div>
 
-            {/* Submit Button */}
+            {/* Submit Button：觸控友善高度 */}
             <Button
               type="submit"
               fullWidth
               isLoading={isLoading}
+              className="min-h-[48px]"
             >
               登入
             </Button>

@@ -241,16 +241,17 @@ export const FoodLogPage: React.FC = () => {
   // 渲染列表視圖
   const renderListView = () => (
     <>
-      {/* 頁面標題和日期選擇 */}
-      <div className="flex items-center justify-between">
+      {/* 頁面標題和日期選擇：手機垂直排列 */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">飲食記錄</h1>
-          <p className="text-gray-600 mt-1">記錄和管理您的每日飲食</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">飲食記錄</h1>
+          <p className="text-gray-600 mt-0.5 sm:mt-1 text-sm sm:text-base">記錄和管理您的每日飲食</p>
         </div>
         <Button
           variant="outline"
           onClick={() => setIsAnalysisModalOpen(true)}
           leftIcon={<FiBarChart2 />}
+          className="min-h-[44px] w-full sm:w-auto shrink-0"
         >
           AI 營養分析
         </Button>
@@ -263,32 +264,36 @@ export const FoodLogPage: React.FC = () => {
         </div>
       )}
 
-      {/* 日期選擇器 */}
+      {/* 日期選擇器：觸控友善按鈕 */}
       <Card>
         <div className="flex items-center justify-center">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             <button
+              type="button"
               onClick={handlePreviousDay}
-              className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg"
+              className="min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-600 hover:bg-gray-100 active:bg-gray-200 rounded-lg"
+              aria-label="前一天"
             >
               <FiChevronLeft className="w-5 h-5" />
             </button>
-            <div className="flex items-center gap-3">
-              <FiCalendar className="w-5 h-5 text-emerald-600" />
-              <div>
+            <div className="flex items-center gap-2 sm:gap-3">
+              <FiCalendar className="w-5 h-5 text-emerald-600 shrink-0" />
+              <div className="text-center sm:text-left">
                 <input
                   type="date"
                   value={selectedDate}
                   onChange={(e) => handleDateChange(e.target.value)}
                   required
-                  className="text-lg font-semibold text-gray-900 border-none bg-transparent focus:outline-none focus:ring-2 focus:ring-emerald-500 rounded px-2 py-1 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-100 [&::-webkit-clear-button]:hidden [&::-ms-clear]:hidden"
+                  className="text-base sm:text-lg font-semibold text-gray-900 border-none bg-transparent focus:outline-none focus:ring-2 focus:ring-emerald-500 rounded px-1 sm:px-2 py-2 min-h-[44px] [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-100 [&::-webkit-clear-button]:hidden [&::-ms-clear]:hidden"
                 />
-                <p className="text-sm text-gray-500">{formatDateDisplay(selectedDate)}</p>
+                <p className="text-xs sm:text-sm text-gray-500">{formatDateDisplay(selectedDate)}</p>
               </div>
             </div>
             <button
+              type="button"
               onClick={handleNextDay}
-              className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg"
+              className="min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-600 hover:bg-gray-100 active:bg-gray-200 rounded-lg"
+              aria-label="後一天"
             >
               <FiChevronRight className="w-5 h-5" />
             </button>

@@ -86,9 +86,9 @@ export const userService = {
   },
 
   /**
-   * 更新使用者名稱
+   * 更新使用者基本資料（後端回傳 { user }，含 id, email, name, createdAt, updatedAt）
    */
-  async updateProfile(data: { name: string }): Promise<{ name: string }> {
+  async updateProfile(data: { name: string }): Promise<{ user: { id: string; email: string; name: string | null; createdAt: string; updatedAt: string } }> {
     const response = await api.put('/users/me', data);
     return response.data.data;
   },

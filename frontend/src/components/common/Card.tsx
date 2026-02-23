@@ -64,8 +64,8 @@ export const Card: React.FC<CardProps> & {
 }) => {
   const classes = `
     bg-white rounded-xl shadow-sm border border-gray-100
-    ${noPadding ? '' : 'p-6'}
-    ${hoverable ? 'hover:shadow-md transition-shadow duration-200 cursor-pointer' : ''}
+    ${noPadding ? '' : 'p-4 sm:p-5 md:p-6'}
+    ${hoverable ? 'hover:shadow-md transition-shadow duration-200 cursor-pointer active:scale-[0.99]' : ''}
     ${className}
   `.trim().replace(/\s+/g, ' ');
 
