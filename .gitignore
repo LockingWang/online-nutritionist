@@ -50,9 +50,6 @@ coverage/
 *.lcov
 .jest/
 
-# Prisma
-backend/prisma/migrations/
-
 # 暫存檔案
 *.tmp
 *.temp
