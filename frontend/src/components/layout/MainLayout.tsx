@@ -20,6 +20,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { logout } from '../../store/slices/authSlice';
 import { resetUserData } from '../../store/slices/userSlice';
 import { ROUTES } from '../../constants/routes';
+import { Logo } from '../common/Logo';
 
 // ============================================
 // 類型定義
@@ -87,7 +88,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
             <FiMenu className="w-6 h-6" />
           </button>
           <h1 className="text-base sm:text-lg font-semibold text-emerald-600 truncate max-w-[50vw]">
-            營養管理系統
+            <Link to={ROUTES.DASHBOARD}>營養管理系統</Link>
           </h1>
           <div className="w-11 min-w-[44px]" aria-hidden />
         </div>
@@ -114,12 +115,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       >
         {/* Logo */}
         <div className="flex items-center justify-between h-14 min-h-[56px] px-4 border-b border-gray-200 safe-area-top">
-          <Link to={ROUTES.DASHBOARD} className="flex items-center gap-2 min-h-[44px] items-center">
-            <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center shrink-0">
-              <span className="text-white font-bold text-sm">N</span>
-            </div>
-            <span className="text-base md:text-lg font-semibold text-gray-900">營養管理</span>
-          </Link>
+          <Logo size="sm" showText linkToDashboard />
           <button
             type="button"
             onClick={closeSidebar}

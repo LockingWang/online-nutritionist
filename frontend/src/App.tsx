@@ -11,7 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 // 路由守衛與登入狀態同步（跨裝置取得最新使用者資料）
 import { ProtectedRoute, PublicRoute } from './components/layout';
 import { AuthSync } from './components/layout/AuthSync';
-import { ErrorBoundary } from './components/common';
+import { ErrorBoundary, DocumentTitle } from './components/common';
 
 // 頁面：程式碼分割，僅在進入該路由時才載入對應 chunk
 const LoginPage = lazy(() => import('./pages/LoginPage'));
@@ -43,6 +43,7 @@ const PageFallback = (
 const App: React.FC = () => {
   return (
     <BrowserRouter>
+      <DocumentTitle />
       {/* 有 token 時從後端同步最新使用者（電腦改姓名後手機重整會更新） */}
       <AuthSync />
       {/* Toast 通知 */}

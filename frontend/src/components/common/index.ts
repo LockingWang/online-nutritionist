@@ -18,3 +18,8 @@ export { Loading, Spinner, LoadingOverlay, PageLoading, Skeleton } from './Loadi
 export type { LoadingProps, LoadingOverlayProps } from './Loading';
 
 export { ErrorBoundary } from './ErrorBoundary';
+
+export { Logo } from './Logo';
+export type { LogoProps } from './Logo';
+
+export { DocumentTitle } from './DocumentTitle';

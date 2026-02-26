@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import { FiMail, FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { login, clearError } from '../store/slices/authSlice';
-import { Button, Input, Card } from '../components/common';
+import { Button, Input, Card, Logo } from '../components/common';
 import { ROUTES } from '../constants/routes';
 
 // ============================================
@@ -61,12 +61,8 @@ export const LoginPage: React.FC = () => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-50 to-teal-100 px-4 py-6 safe-area-top safe-area-bottom">
       <div className="w-full max-w-md">
         {/* Logo */}
-        <div className="text-center mb-6 sm:mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-emerald-600 rounded-xl sm:rounded-2xl mb-3 sm:mb-4">
-            <span className="text-white font-bold text-xl sm:text-2xl">N</span>
-          </div>
-          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">營養管理系統</h1>
-          <p className="text-gray-600 mt-1 sm:mt-2 text-sm sm:text-base">登入您的帳戶</p>
+        <div className="mb-6 sm:mb-8">
+          <Logo size="lg" showText linkToDashboard={false} subtitle="登入您的帳戶" />
         </div>
 
         {/* Login Form */}
