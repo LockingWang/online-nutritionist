@@ -15,6 +15,7 @@ import { ErrorBoundary, DocumentTitle } from './components/common';
 
 // 頁面：程式碼分割，僅在進入該路由時才載入對應 chunk
 const LoginPage = lazy(() => import('./pages/LoginPage'));
+const LandingPage = lazy(() => import('./pages/LandingPage'));
 const RegisterPage = lazy(() => import('./pages/RegisterPage'));
 const DashboardPage = lazy(() => import('./pages/DashboardPage'));
 const ProfilePage = lazy(() => import('./pages/ProfilePage'));
@@ -67,7 +68,7 @@ const App: React.FC = () => {
           {/* 公開路由 */}
           <Route
             path={ROUTES.HOME}
-            element={<Navigate to={ROUTES.LOGIN} replace />}
+            element={<LandingPage />}
           />
           <Route
             path={ROUTES.LOGIN}

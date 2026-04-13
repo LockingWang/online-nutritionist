@@ -3,6 +3,7 @@
  */
 
 export { LoginPage } from './LoginPage';
+export { LandingPage } from './LandingPage';
 export { RegisterPage } from './RegisterPage';
 export { DashboardPage } from './DashboardPage';
 export { ProfilePage } from './ProfilePage';
