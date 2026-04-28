@@ -1,90 +1,123 @@
-```markdown
-# 線上營養師網頁（Nutrition Tracker）
+<div align="center">
 
-一個完整的全端應用程式，幫助使用者管理個人營養需求與飲食記錄。
+![營養管理系統 Logo](frontend/public/logo.svg)
 
-## 專案簡介
+# 營養管理系統
 
-本專案是一個線上營養師網頁應用程式，使用 React + Node.js 開發，展示現代化的全端開發能力。
+**飲食記錄 · AI 營養師 · 熱量與營養統計**
 
-## 技術棧
+[立即體驗線上版本](http://nutrition.cong-ren.com/) · [登入](http://nutrition.cong-ren.com/login)
 
-### 前端
-- React 18 + TypeScript
-- Vite
-- Redux Toolkit
-- React Query (TanStack Query)
-- Tailwind CSS
-- React Hook Form + Zod
+</div>
 
-### 後端
-- Node.js + Express + TypeScript
-- PostgreSQL
-- Prisma ORM
-- JWT 認證
-- OpenAI API
+---
+
+把「記錄、分析、諮詢」放在同一個地方——登入後即可跨裝置同步每日飲食，用圖表看懂熱量與營養趨勢，並透過 AI 取得餐點建議與營養對話，讓健康管理少一些猜測、多一些依據。
+
+## 為什麼選擇這個平台？
+
+| 你可能遇到的狀況 | 這裡怎麼幫你 |
+|------------------|--------------|
+| 每天吃了什麼很難回溯 | 結構化 **飲食記錄**，方便補登與查閱 |
+| 只看總熱量不夠安心 | **營養分析與統計**，用週／月視角掌握變化 |
+| 想知道「接下來該怎麼吃」 | **餐點建議** 與 **AI 營養師** 對話，輔助規劃 |
+
+---
+
+## 產品體驗一覽
+
+```mermaid
+flowchart LR
+  A[建立帳戶 / 登入] --> B[個人資料與目標]
+  B --> C[飲食記錄]
+  C --> D[統計分析]
+  C --> E[餐點建議]
+  C --> F[AI 營養師]
+  D --> G[更可執行的下一步]
+  E --> G
+  F --> G
+```
+
+- **智慧營養管理平台**：公開首頁即可了解產品定位；登入後開啟完整功能。
+- **紀錄安全**：個人帳號保存資料，跨裝置查看。
+- **即時統計**：從趨勢掌握熱量與營養攝取。
+- **AI 協助**：營養相關問題與餐點靈感，一站取得。
+
+> **立刻試用：** [http://nutrition.cong-ren.com/](http://nutrition.cong-ren.com/)
+
+---
+
+## 技術概要（開發者速覽）
+
+本專案為 **React（Vite）全端應用**：前端使用 TypeScript、Redux Toolkit、TanStack Query、Tailwind CSS、React Hook Form、Zod、Recharts；後端為 **Express + TypeScript**，資料層 **PostgreSQL + Prisma**，身分驗證 **JWT**，並整合 **OpenAI** 提供 AI 能力。
+
+---
+
+## 功能特色
+
+- 使用者認證（JWT）
+- 個人營養需求（TDEE / BMR 等）
+- 飲食記錄 CRUD
+- 營養素分析與圖表
+- AI 餐點建議
+- AI 營養諮詢
+
+---
 
 ## 專案結構
 
 ```
-nutrition-tracker/
-├── frontend/     # React 前端應用
-├── backend/      # Node.js 後端 API
+Ren_React_Project/
+├── frontend/     # React 前端（Vite）
+├── backend/      # Express API
 └── docs/         # 專案文件
 ```
+
+---
 
 ## 快速開始
 
 ### 前置需求
+
 - Node.js 18+
 - PostgreSQL 15+
 - npm 或 yarn
 
-### 安裝與執行
+### 後端
 
-#### 後端
 ```bash
 cd backend
 npm install
-cp .env.example .env  # 設定環境變數
+cp .env.example .env   # 設定環境變數
 npm run prisma:migrate
 npm run dev
 ```
 
-#### 前端
+### 前端
+
 ```bash
 cd frontend
 npm install
-cp .env.example .env  # 設定環境變數
+cp .env.example .env   # 設定環境變數
 npm run dev
 ```
 
-## 功能特色
+---
 
-- ✅ 使用者認證系統（JWT）
-- ✅ 個人營養需求計算（TDEE/BMR）
-- ✅ 飲食記錄管理（CRUD）
-- ✅ 營養素分析與視覺化
-- ✅ AI 餐點推薦
-- ✅ AI 營養諮詢
+## 文件
 
-## API 文件
+- [後端 API 說明](backend/README.md)
+- [SEO 優化規劃](docs/SEO優化規劃.md)
 
-詳細 API 文件請參考 [docs/後端架構規劃.md](./docs/後端架構規劃.md)
+---
 
-## 開發文件
+## 部署參考
 
-- [專案內容企劃書](./docs/專案內容企劃書.md)
-- [後端架構規劃](./docs/後端架構規劃.md)
-- [套件清單](./docs/套件清單.md)
-- [開發順序指南](./docs/開發順序指南.md)
+- **前端**：例如 [Vercel](https://vercel.com)、[Netlify](https://netlify.com)
+- **後端**：例如 [Railway](https://railway.app)、[Render](https://render.com)
 
-## 部署
-
-- **前端**: [Vercel](https://vercel.com) 或 [Netlify](https://netlify.com)
-- **後端**: [Railway](https://railway.app) 或 [Render](https://render.com)
+---
 
 ## 授權
 
 MIT License
-```
